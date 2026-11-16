@@ -222,6 +222,38 @@ textarea.inp{height:auto;min-height:96px;padding:8px 10px;resize:vertical;line-h
 .thp i{flex:1;height:55%;border-radius:5px}
 .thp i:nth-child(2){height:85%}
 .tm{width:300px}
+.ib{position:relative}
+.badge{position:absolute;top:-5px;right:-5px;min-width:18px;height:18px;border-radius:9px;background:#E5484D;color:#fff;font-size:11px;font-weight:800;display:grid;place-items:center;padding:0 5px;line-height:1}
+.badge:empty{display:none}
+.tkh{margin:14px 0 6px;font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted)}
+.tkh:first-child{margin-top:0}
+.tkh.over{color:#E5484D}
+.tkr{display:flex;gap:10px;align-items:flex-start;padding:8px 10px;border-radius:12px;background:var(--surface2);margin-bottom:6px;box-shadow:inset 4px 0 0 var(--c)}
+.tkr.done{opacity:.55}
+.tkr.done .tkt{text-decoration:line-through}
+.tkc{width:24px;height:24px;flex:none;border-radius:7px;border:2px solid var(--muted);background:transparent;color:var(--accentText);font-weight:900;font-size:13px;line-height:1;padding:0;margin-top:2px}
+.tkc.on{background:var(--accent);border-color:var(--accent)}
+.tkb{flex:1;min-width:0;text-align:left;border:0;background:transparent;padding:0}
+.tkt{font-weight:650;font-size:14px;display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.tks{font-size:12px;color:var(--muted);margin-top:3px}
+.kchip{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.05em;padding:2px 6px;border-radius:6px;background:var(--surface);border:1px solid var(--border);color:var(--muted)}
+.kchip.k-exam{background:var(--admin);color:#fff;border-color:transparent}
+.kchip.k-homework{background:var(--accent);color:var(--accentText);border-color:transparent}
+.tkchips{display:flex;flex-wrap:wrap;gap:4px;padding:6px 8px 0}
+.tkchip{display:inline-flex;align-items:center;gap:4px;max-width:100%;font-size:11.5px;font-weight:700;padding:2px 8px;border-radius:999px;border:0;background:var(--accent);color:var(--accentText);overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.tkchip.k-exam{background:var(--admin);color:#fff}
+.tkchip.k-task{background:var(--surface);color:var(--text);border:1px solid var(--border)}
+.tkchip.done{opacity:.5;text-decoration:line-through}
+.dhb{border:0;border-radius:999px;background:var(--admin);color:#fff;font-size:11px;font-weight:800;min-width:20px;height:20px;padding:0 6px;margin-left:auto}
+.dt{position:relative}
+.dt .dot{position:absolute;top:6px;right:8px;width:7px;height:7px;border-radius:50%;background:var(--admin)}
+.profs{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+.pc{display:flex;gap:10px;align-items:flex-start;text-align:left;padding:12px;border-radius:14px;border:2px solid var(--border);background:var(--surface2)}
+.pc .ic{color:var(--accent);margin-top:2px}
+.pc b{display:block;font-size:14px}
+.pc small{display:block;color:var(--muted);font-size:12px;margin-top:2px}
+.pc.on{border-color:var(--accent);box-shadow:0 0 0 3px var(--glow)}
+@media (max-width:520px){.profs{grid-template-columns:1fr}}
 .pop.sheet .tm{width:auto}
 .settings{display:grid;grid-template-columns:210px 1fr;height:100%}
 .snav{display:flex;flex-direction:column;gap:2px;padding:12px;border-right:1px solid var(--border);overflow:auto}
@@ -274,7 +306,8 @@ details.gen .inp{background:var(--surface)}
 .gp.t-lunch{background:var(--admin);color:#fff;border-color:transparent}
 /* ---------- onboarding ---------- */
 .onb{min-height:100vh;display:grid;place-items:center;padding:calc(env(safe-area-inset-top) + 20px) 16px calc(env(safe-area-inset-bottom) + 20px)}
-.ocard{width:min(580px,100%);background:var(--surface);border:1px solid var(--border);border-radius:24px;padding:28px;box-shadow:0 30px 80px rgba(0,0,0,.25);animation:fade .4s ease}
+.ocard{width:min(580px,100%);background:var(--surface);border:1px solid var(--border);border-radius:24px;padding:28px;box-shadow:0 30px 80px rgba(0,0,0,.25)}
+.ocard.anim{animation:fade .4s ease}
 .ocard h1{margin:6px 0;font-size:28px;letter-spacing:-.02em}
 .lead{color:var(--muted);margin:0 0 10px}
 .dots{display:flex;gap:6px;margin-bottom:20px}
@@ -320,7 +353,7 @@ details.gen .inp{background:var(--surface)}
 <div id="app"></div>
 <script>
 'use strict';
-const VERSION = '2.1.1';
+const VERSION = '2.2.0';
 
 /* ================= Stockage (natif ou navigateur) ================= */
 const isNative = !!(window.Capacitor && window.Capacitor.isNativePlatform && window.Capacitor.isNativePlatform());
@@ -379,6 +412,7 @@ const I18N = {
     checkNote: 'Vérifiez toujours ces dates avec le calendrier officiel de votre établissement.', nothingFound: 'Aucune date trouvée dans ce fichier.',
     calSummary: '{v} périodes de vacances · {h} jours fériés', calRegionBtn: 'Charger le calendrier de ma région',
     apply: 'Appliquer', dayTitle: 'Journée', dayStart: 'Début de la journée', dayEnd: 'Fin de la journée', dayHint: 'Changer le début décale toutes les périodes et pauses ; changer la fin modifie la dernière ligne. Touchez « Appliquer ». Chaque ligne reste modifiable ci-dessous.',
+    profile: "Profil", stepProfile: "Vous êtes…", prof_teacher: "Enseignant·e", prof_teacher_d: "Cours, classes, plans de leçon", prof_student: "Élève ou étudiant·e", prof_student_d: "Horaire, devoirs, examens", prof_coach: "Formateur·trice ou coach", prof_coach_d: "Séances, groupes, lieux", prof_personal: "Usage personnel", prof_personal_d: "Semaine type, activités, rendez-vous", profileHint: "Adapte le vocabulaire (discipline, classe, salle…). Vos données ne changent pas.", tasks: "Devoirs & échéances", newTask: "Nouvelle échéance", editTask: "Modifier l’échéance", taskTitle: "Intitulé", due: "Pour le", kind_homework: "Devoir", kind_exam: "Examen", kind_task: "Tâche", noTasks: "Rien à faire pour le moment.", overdue: "En retard", tomorrow: "Demain", upcoming: "À venir", doneLbl: "Terminées", addTaskForLesson: "Ajouter un devoir ou un examen", addTaskHint: "Pour la prochaine séance de ce cours.", reminders: "Rappels", remindersHint: "Notification avant chaque cours et la veille des examens à 18 h (app installée sur téléphone ou tablette).", remindOff: "Aucun rappel", minBefore: "{n} min avant", notifExamTitle: "Examen demain", notifDenied: "Notifications refusées : autorisez-les dans les réglages du téléphone.", more: "Plus", exportPdf: "Exporter la semaine en PDF", exportPdfHint: "Pour imprimer ou partager.", exportIcs: "Exporter vers mon calendrier (.ics)", exportIcsHint: "Toutes les séances de l’année et les échéances, pour Apple Calendrier, Google Agenda ou Outlook.", pdfFail: "La création du PDF a échoué.", region: "Région", national: "Tout le pays", regionsFail: "Liste des régions indisponible (pas de connexion). Seules les données nationales seront chargées.", onlineNote: "Données publiques en ligne (OpenHolidays) : vérifiez-les.", ohFail: "Impossible de charger les données (pas de connexion ?). Importez un fichier .ics ou saisissez vos dates à la main.", 
     search: 'Rechercher', searchPh: 'Rechercher dans toutes les notes…', noResults: 'Aucun résultat.',
     checklist: 'Liste de tâches', template: 'Insérer un modèle', tab_templates: 'Modèles', templatesHint: 'Le texte avant « : » est mis en gras. Insérez un modèle avec le bouton de la barre d’outils.', newTemplate: 'Nouveau modèle', manage: 'Gérer les modèles',
     tplNames: ['Plan de leçon', 'Évaluation'], tplBodies: ['Objectifs :\nMatériel :\nDéroulement :\nDevoirs :', 'Thème :\nCritères :\nBarème :\nRemarques :'],
@@ -437,6 +471,7 @@ const I18N = {
     checkNote: 'Prüfen Sie diese Daten immer mit dem offiziellen Kalender Ihrer Schule.', nothingFound: 'Keine Daten in dieser Datei gefunden.',
     calSummary: '{v} Ferienperioden · {h} Feiertage', calRegionBtn: 'Kalender meiner Region laden',
     apply: 'Übernehmen', dayTitle: 'Schultag', dayStart: 'Tagesbeginn', dayEnd: 'Tagesende', dayHint: 'Ein neuer Beginn verschiebt alle Lektionen und Pausen; ein neues Ende ändert die letzte Zeile. Tippen Sie auf „Übernehmen“. Jede Zeile bleibt unten einzeln änderbar.',
+    profile: "Profil", stepProfile: "Sie sind…", prof_teacher: "Lehrperson", prof_teacher_d: "Lektionen, Klassen, Unterrichtspläne", prof_student: "Schüler·in oder Student·in", prof_student_d: "Stundenplan, Hausaufgaben, Prüfungen", prof_coach: "Trainer·in oder Coach", prof_coach_d: "Trainings, Gruppen, Orte", prof_personal: "Persönlich", prof_personal_d: "Wochenablauf, Aktivitäten, Termine", profileHint: "Passt die Begriffe an (Fach, Klasse, Zimmer…). Ihre Daten bleiben unverändert.", tasks: "Aufgaben & Termine", newTask: "Neuer Termin", editTask: "Termin bearbeiten", taskTitle: "Titel", due: "Fällig am", kind_homework: "Hausaufgabe", kind_exam: "Prüfung", kind_task: "Aufgabe", noTasks: "Im Moment nichts zu tun.", overdue: "Überfällig", tomorrow: "Morgen", upcoming: "Demnächst", doneLbl: "Erledigt", addTaskForLesson: "Hausaufgabe oder Prüfung hinzufügen", addTaskHint: "Für die nächste Lektion dieses Kurses.", reminders: "Erinnerungen", remindersHint: "Benachrichtigung vor jeder Lektion und am Vorabend von Prüfungen um 18 Uhr (installierte App).", remindOff: "Keine Erinnerung", minBefore: "{n} Min. vorher", notifExamTitle: "Prüfung morgen", notifDenied: "Benachrichtigungen abgelehnt: Erlauben Sie sie in den Geräteeinstellungen.", more: "Mehr", exportPdf: "Woche als PDF exportieren", exportPdfHint: "Zum Drucken oder Teilen.", exportIcs: "In meinen Kalender exportieren (.ics)", exportIcsHint: "Alle Lektionen des Jahres und Termine, für Apple Kalender, Google Kalender oder Outlook.", pdfFail: "PDF konnte nicht erstellt werden.", region: "Region", national: "Ganzes Land", regionsFail: "Regionenliste nicht verfügbar (keine Verbindung). Nur landesweite Daten werden geladen.", onlineNote: "Öffentliche Online-Daten (OpenHolidays): bitte prüfen.", ohFail: "Daten konnten nicht geladen werden (keine Verbindung?). Importieren Sie eine .ics-Datei oder geben Sie die Daten von Hand ein.", 
     search: 'Suchen', searchPh: 'In allen Notizen suchen…', noResults: 'Keine Ergebnisse.',
     checklist: 'Checkliste', template: 'Vorlage einfügen', tab_templates: 'Vorlagen', templatesHint: 'Text vor „:“ wird fett. Fügen Sie eine Vorlage über die Werkzeugleiste ein.', newTemplate: 'Neue Vorlage', manage: 'Vorlagen verwalten',
     tplNames: ['Lektionsplan', 'Prüfung'], tplBodies: ['Ziele:\nMaterial:\nAblauf:\nHausaufgaben:', 'Thema:\nKriterien:\nBewertung:\nBemerkungen:'],
@@ -495,6 +530,7 @@ const I18N = {
     checkNote: 'Always check these dates against your school’s official calendar.', nothingFound: 'No dates found in this file.',
     calSummary: '{v} holiday periods · {h} public holidays', calRegionBtn: 'Load my region’s calendar',
     apply: 'Apply', dayTitle: 'School day', dayStart: 'Start of day', dayEnd: 'End of day', dayHint: 'Changing the start shifts every period and break; changing the end adjusts the last row. Tap “Apply”. Each row stays editable below.',
+    profile: "Profile", stepProfile: "You are…", prof_teacher: "Teacher", prof_teacher_d: "Lessons, classes, lesson plans", prof_student: "Student", prof_student_d: "Timetable, homework, exams", prof_coach: "Trainer or coach", prof_coach_d: "Sessions, groups, venues", prof_personal: "Personal use", prof_personal_d: "Weekly routine, activities, appointments", profileHint: "Adapts the wording (subject, class, room…). Your data stays the same.", tasks: "Homework & deadlines", newTask: "New deadline", editTask: "Edit deadline", taskTitle: "Title", due: "Due", kind_homework: "Homework", kind_exam: "Exam", kind_task: "Task", noTasks: "Nothing to do right now.", overdue: "Overdue", tomorrow: "Tomorrow", upcoming: "Upcoming", doneLbl: "Done", addTaskForLesson: "Add homework or an exam", addTaskHint: "Due at the next lesson of this course.", reminders: "Reminders", remindersHint: "Notification before each lesson and at 6 pm the evening before exams (installed app).", remindOff: "No reminder", minBefore: "{n} min before", notifExamTitle: "Exam tomorrow", notifDenied: "Notifications blocked: allow them in your device settings.", more: "More", exportPdf: "Export week as PDF", exportPdfHint: "To print or share.", exportIcs: "Export to my calendar (.ics)", exportIcsHint: "Every lesson of the year plus deadlines, for Apple Calendar, Google Calendar or Outlook.", pdfFail: "Could not create the PDF.", region: "Region", national: "Whole country", regionsFail: "Region list unavailable (no connection). Only national data will be loaded.", onlineNote: "Public online data (OpenHolidays): please check.", ohFail: "Could not load the data (no connection?). Import an .ics file or enter your dates by hand.", 
     search: 'Search', searchPh: 'Search all notes…', noResults: 'No results.',
     checklist: 'Checklist', template: 'Insert template', tab_templates: 'Templates', templatesHint: 'Text before “:” becomes bold. Insert a template from the toolbar.', newTemplate: 'New template', manage: 'Manage templates',
     tplNames: ['Lesson plan', 'Assessment'], tplBodies: ['Objectives:\nMaterials:\nProcedure:\nHomework:', 'Topic:\nCriteria:\nMarking:\nNotes:'],
@@ -509,11 +545,18 @@ const I18N = {
     restore: 'Restore', restoreConfirm: 'Replace all your data with this backup?', noBackups: 'No automatic backup yet.', lastExport: 'Last export: {d}', never: 'never',
     webBackupHint: 'On a computer, the browser keeps your data: export a backup regularly.',
   },
+  it: {"title": "Pianificazione settimanale", "today": "Oggi", "day": "Giorno", "week": "Settimana", "wk": "Settimana", "prevWeek": "Settimana precedente", "nextWeek": "Settimana successiva", "settings": "Impostazioni", "save": "Salva", "cancel": "Annulla", "delete": "Elimina", "ok": "OK", "confirm": "Conferma", "add": "Aggiungi", "saved": "Salvato", "saving": "Salvataggio…", "font": "Carattere", "fontDefault": "Standard", "size": "Dimensione", "bold": "Grassetto", "italic": "Corsivo", "underline": "Sottolineato", "strike": "Barrato", "boldL": "G", "italicL": "C", "underlineL": "S", "textColor": "Colore del testo", "highlight": "Evidenziatore", "bullets": "Elenco puntato", "numbered": "Elenco numerato", "alignL": "Allinea a sinistra", "alignC": "Centra", "alignR": "Allinea a destra", "link": "Inserisci un link", "clear": "Cancella formattazione", "undo": "Annulla digitazione", "redo": "Ripeti", "pickCell": "Tocca prima una casella di note.", "linkUrl": "Indirizzo del link", "openLink": "Apri", "removeLink": "Rimuovi link", "custom": "Personalizzato", "presets": "Tavolozza", "recent": "Recenti", "none": "Nessuno", "color": "Colore", "holiday": "Giorno festivo", "vacation": "Vacanze", "type_lesson": "Lezione", "type_break": "Pausa", "type_lunch": "Pranzo", "type_admin": "Tempo amministrativo", "type_other": "Altro", "tab_general": "Generale", "tab_slots": "Lezioni e pause", "tab_subjects": "Materie", "tab_timetable": "Orario", "tab_year": "Anno scolastico", "tab_data": "Dati", "yourName": "Il tuo nome (facoltativo)", "language": "Lingua", "theme": "Tema", "daysShown": "Giorni visualizzati", "timeFormat": "Formato orario", "noteFont": "Carattere predefinito delle note", "generator": "Generatore rapido", "genHint": "Crea tutta la giornata con un clic, poi regola ogni riga.", "firstStart": "Inizio della 1ª lezione", "lessonDur": "Durata di una lezione (min)", "lessonCount": "Numero di lezioni", "gapDur": "Intervallo tra lezioni (min)", "breakDur": "Durata delle pause (min)", "breakAfter": "Pausa dopo le lezioni n.", "lunchAfter": "Pranzo dopo la lezione n. (0 = nessuno)", "lunchDur": "Durata del pranzo (min)", "generate": "Genera", "genConfirm": "Sostituire le lezioni e le pause attuali? Corsi e note vengono mantenuti per quanto possibile.", "label": "Etichetta", "start": "Inizio", "end": "Fine", "type": "Tipo", "subject": "Materia", "short": "Abbr.", "newSubject": "Nuova materia", "class": "Classe", "room": "Aula", "from": "Da", "to": "A", "addLesson": "Aggiungi una lezione", "editLesson": "Modifica la lezione", "lessonRepeats": "Questa lezione si ripete ogni settimana.", "ttHint": "Suggerimento: nella griglia tocca ＋ in una casella vuota per aggiungere una lezione, o tocca l’intestazione di una lezione per modificarla.", "noLessons": "Nessuna lezione in questo giorno.", "overlapLesson": "Questa fascia si sovrappone a un’altra lezione.", "pickSubject": "Scegli una materia.", "yearStart": "Primo giorno", "yearEnd": "Ultimo giorno", "vacations": "Vacanze", "holidays": "Giorni festivi", "name": "Nome", "date": "Data", "export": "Esporta un backup", "import": "Importa un backup", "exported": "Backup esportato.", "exportFail": "Esportazione non riuscita.", "importOk": "Importazione completata.", "importBad": "File non valido.", "importConfirm": "Sostituire tutti i tuoi dati con quelli del file?", "reset": "Cancella tutto", "resetConfirm": "Cancellare definitivamente tutti i dati di questo dispositivo?", "privacy": "I tuoi dati restano solo su questo dispositivo. Non servono account né connessione Internet. Ricordati di esportare un backup ogni tanto.", "welcome": "Benvenuto", "welcomeSub": "La tua pianificazione delle lezioni, settimana dopo settimana.", "chooseLang": "Scegli la lingua", "next": "Avanti", "back": "Indietro", "finish": "Inizia", "stepLook": "Personalizza", "stepDay": "La tua giornata tipo", "stepYear": "Il tuo anno scolastico", "haveBackup": "Ho già un backup", "yearHint": "Vacanze e festivi: Impostazioni › Anno scolastico.", "notes": "Note…", "addHere": "Aggiungi una lezione qui", "welcomeTip": "Tocca ＋ in una casella per aggiungere le tue lezioni.", "deleteSubjectConfirm": "Questa materia è usata da {n} lezioni, che verranno eliminate. Continuare?", "deleteSlotConfirm": "Alcune lezioni usano questa riga e verranno eliminate. Continuare?", "noSlots": "Nessuna lezione definita per ora.", "loadCal": "Carica un calendario scolastico", "calRegion": "Regione ufficiale", "calFile": "File .ics", "country": "Paese", "load": "Carica", "loading": "Caricamento…", "replaceCal": "Sostituisci", "mergeCal": "Aggiungi", "chooseFile": "Scegli un file .ics", "clearCal": "Svuota il calendario", "clearCalConfirm": "Eliminare tutte le vacanze e tutti i giorni festivi?", "calIntro": "Carica il calendario ufficiale della tua regione, importa quello della tua scuola (.ics) o inserisci le date qui sotto.", "icsHint": "Molte scuole, comuni e amministrazioni pubblicano il loro calendario in formato .ics (iCalendar). Gli eventi di più giorni diventano vacanze, quelli di un giorno giorni liberi.", "netFail": "Impossibile caricare le vacanze (nessuna connessione o dati non ancora pubblicati). I giorni festivi sono stati calcolati; completa a mano o con un file .ics.", "caNote": "In Canada le vacanze dipendono dal distretto scolastico: importa il suo file .ics o aggiungile a mano. I festivi della provincia sono calcolati automaticamente.", "checkNote": "Verifica sempre queste date con il calendario ufficiale della tua scuola.", "nothingFound": "Nessuna data trovata in questo file.", "calSummary": "{v} periodi di vacanza · {h} giorni festivi", "calRegionBtn": "Carica il calendario della mia regione", "apply": "Applica", "dayTitle": "Giornata", "dayStart": "Inizio della giornata", "dayEnd": "Fine della giornata", "dayHint": "Cambiare l’inizio sposta tutte le lezioni e pause; cambiare la fine modifica l’ultima riga. Tocca «Applica». Ogni riga resta modificabile qui sotto.", "search": "Cerca", "searchPh": "Cerca in tutte le note…", "noResults": "Nessun risultato.", "checklist": "Lista di controllo", "template": "Inserisci un modello", "tab_templates": "Modelli", "templatesHint": "Il testo prima di «:» diventa grassetto. Inserisci un modello dal pulsante della barra degli strumenti.", "newTemplate": "Nuovo modello", "manage": "Gestisci i modelli", "tplNames": ["Piano della lezione", "Verifica"], "tplBodies": ["Obiettivi:\nMateriale:\nSvolgimento:\nCompiti:", "Tema:\nCriteri:\nPunteggio:\nOsservazioni:"], "rotation": "Settimane A/B", "rotationHint": "Per orari che si alternano ogni due settimane. Le settimane interamente di vacanza non contano.", "off": "Disattivato", "on": "Attivato", "firstWeek": "Prima settimana dell’anno", "weeksLbl": "Settimane", "everyWeek": "Tutte", "weekA": "Settimana A", "weekB": "Settimana B", "shiftFwd": "Sposta le note →", "shiftFwdHint": "Lezione annullata: ogni nota di questo corso (stessa materia e classe) passa alla lezione successiva.", "shiftBack": "← Riporta le note", "shiftBackHint": "Ogni nota successiva torna indietro di una lezione; la nota di questa lezione viene sostituita.", "shiftBackConfirm": "La nota di questa lezione sarà sostituita da quella successiva. Continuare?", "copyNext": "Copia nella prossima lezione", "copyNextHint": "Aggiunge questa nota alla lezione successiva di questo corso.", "editLessonHint": "Materia, orario, classe, aula, settimane A/B.", "shiftedFwd": "Note spostate di una lezione.", "shiftedBack": "Note riportate di una lezione.", "copied": "Nota copiata a {d}.", "noNext": "Nessuna lezione successiva nell’anno scolastico.", "notInYear": "Questa settimana è fuori dall’anno scolastico definito.", "undoAction": "Annulla", "emptyNote": "Questa nota è vuota.", "goToWeek": "Vai alla settimana", "backupHint": "Nessun backup esportato da {n} giorni.", "backupNever": "Non hai ancora mai esportato un backup.", "later": "Più tardi", "autoBackups": "Backup automatici", "autoBackupsHint": "Ogni settimana una copia completa viene salvata su questo dispositivo (ultime 8). Scompare se l’app viene disinstallata: esporta anche ogni tanto.", "restore": "Ripristina", "restoreConfirm": "Sostituire tutti i tuoi dati con questo backup?", "noBackups": "Ancora nessun backup automatico.", "lastExport": "Ultima esportazione: {d}", "never": "mai", "webBackupHint": "Sul computer i dati sono conservati dal browser: esporta regolarmente un backup.", "profile": "Profilo", "stepProfile": "Sei…", "prof_teacher": "Insegnante", "prof_teacher_d": "Lezioni, classi, piani di lezione", "prof_student": "Studente", "prof_student_d": "Orario, compiti, verifiche", "prof_coach": "Formatore o coach", "prof_coach_d": "Sessioni, gruppi, luoghi", "prof_personal": "Uso personale", "prof_personal_d": "Settimana tipo, attività, appuntamenti", "profileHint": "Adatta i termini (materia, classe, aula…). I tuoi dati non cambiano.", "tasks": "Compiti e scadenze", "newTask": "Nuova scadenza", "editTask": "Modifica scadenza", "taskTitle": "Titolo", "due": "Per il", "kind_homework": "Compito", "kind_exam": "Verifica", "kind_task": "Attività", "noTasks": "Niente da fare per ora.", "overdue": "In ritardo", "tomorrow": "Domani", "upcoming": "In arrivo", "doneLbl": "Completate", "addTaskForLesson": "Aggiungi un compito o una verifica", "addTaskHint": "Per la prossima lezione di questo corso.", "reminders": "Promemoria", "remindersHint": "Notifica prima di ogni lezione e alle 18 della sera prima delle verifiche (app installata).", "remindOff": "Nessun promemoria", "minBefore": "{n} min prima", "notifExamTitle": "Verifica domani", "notifDenied": "Notifiche rifiutate: consentile nelle impostazioni del dispositivo.", "more": "Altro", "exportPdf": "Esporta la settimana in PDF", "exportPdfHint": "Per stampare o condividere.", "exportIcs": "Esporta nel mio calendario (.ics)", "exportIcsHint": "Tutte le lezioni dell’anno e le scadenze, per Calendario Apple, Google Calendar o Outlook.", "pdfFail": "Impossibile creare il PDF.", "region": "Regione", "national": "Tutto il paese", "regionsFail": "Elenco regioni non disponibile (nessuna connessione). Verranno caricati solo i dati nazionali.", "onlineNote": "Dati pubblici online (OpenHolidays): verificali.", "ohFail": "Impossibile caricare i dati (nessuna connessione?). Importa un file .ics o inserisci le date a mano."},
+  es: {"title": "Planificación semanal", "today": "Hoy", "day": "Día", "week": "Semana", "wk": "Semana", "prevWeek": "Semana anterior", "nextWeek": "Semana siguiente", "settings": "Ajustes", "save": "Guardar", "cancel": "Cancelar", "delete": "Eliminar", "ok": "OK", "confirm": "Confirmación", "add": "Añadir", "saved": "Guardado", "saving": "Guardando…", "font": "Fuente", "fontDefault": "Estándar", "size": "Tamaño", "bold": "Negrita", "italic": "Cursiva", "underline": "Subrayado", "strike": "Tachado", "boldL": "N", "italicL": "K", "underlineL": "S", "textColor": "Color del texto", "highlight": "Resaltado", "bullets": "Lista con viñetas", "numbered": "Lista numerada", "alignL": "Alinear a la izquierda", "alignC": "Centrar", "alignR": "Alinear a la derecha", "link": "Insertar un enlace", "clear": "Borrar formato", "undo": "Deshacer", "redo": "Rehacer", "pickCell": "Toca primero una casilla de notas.", "linkUrl": "Dirección del enlace", "openLink": "Abrir", "removeLink": "Quitar el enlace", "custom": "Personalizado", "presets": "Paleta", "recent": "Recientes", "none": "Ninguno", "color": "Color", "holiday": "Día festivo", "vacation": "Vacaciones", "type_lesson": "Clase", "type_break": "Recreo", "type_lunch": "Comida", "type_admin": "Tiempo administrativo", "type_other": "Otro", "tab_general": "General", "tab_slots": "Clases y descansos", "tab_subjects": "Asignaturas", "tab_timetable": "Horario", "tab_year": "Curso escolar", "tab_data": "Datos", "yourName": "Tu nombre (opcional)", "language": "Idioma", "theme": "Tema", "daysShown": "Días mostrados", "timeFormat": "Formato de hora", "noteFont": "Fuente predeterminada de las notas", "generator": "Generador rápido", "genHint": "Crea toda tu jornada con un clic y luego ajusta cada fila.", "firstStart": "Inicio de la 1.ª clase", "lessonDur": "Duración de una clase (min)", "lessonCount": "Número de clases", "gapDur": "Cambio entre clases (min)", "breakDur": "Duración de los descansos (min)", "breakAfter": "Descanso después de las clases n.º", "lunchAfter": "Comida después de la clase n.º (0 = ninguna)", "lunchDur": "Duración de la comida (min)", "generate": "Generar", "genConfirm": "¿Reemplazar las clases y descansos actuales? Tus clases y notas se conservan en lo posible.", "label": "Etiqueta", "start": "Inicio", "end": "Fin", "type": "Tipo", "subject": "Asignatura", "short": "Abrev.", "newSubject": "Nueva asignatura", "class": "Grupo", "room": "Aula", "from": "De", "to": "A", "addLesson": "Añadir una clase", "editLesson": "Editar la clase", "lessonRepeats": "Esta clase se repite cada semana.", "ttHint": "Consejo: en la cuadrícula, toca ＋ en una casilla vacía para añadir una clase, o toca el encabezado de una clase para editarla.", "noLessons": "No hay clases este día.", "overlapLesson": "Esta franja se solapa con otra clase.", "pickSubject": "Elige una asignatura.", "yearStart": "Primer día", "yearEnd": "Último día", "vacations": "Vacaciones", "holidays": "Días festivos", "name": "Nombre", "date": "Fecha", "export": "Exportar una copia de seguridad", "import": "Importar una copia de seguridad", "exported": "Copia exportada.", "exportFail": "La exportación ha fallado.", "importOk": "Importación completada.", "importBad": "Archivo no válido.", "importConfirm": "¿Reemplazar todos tus datos por los del archivo?", "reset": "Borrar todo", "resetConfirm": "¿Borrar definitivamente todos los datos de este dispositivo?", "privacy": "Tus datos se quedan solo en este dispositivo. No se necesita cuenta ni conexión a Internet. Exporta una copia de seguridad de vez en cuando.", "welcome": "Bienvenido", "welcomeSub": "Tu planificación de clases, semana tras semana.", "chooseLang": "Elige tu idioma", "next": "Siguiente", "back": "Atrás", "finish": "Empezar", "stepLook": "Personaliza", "stepDay": "Tu jornada tipo", "stepYear": "Tu curso escolar", "haveBackup": "Ya tengo una copia de seguridad", "yearHint": "Vacaciones y festivos: Ajustes › Curso escolar.", "notes": "Notas…", "addHere": "Añadir una clase aquí", "welcomeTip": "Toca ＋ en una casilla para añadir tus clases.", "deleteSubjectConfirm": "Esta asignatura la usan {n} clases, que se eliminarán. ¿Continuar?", "deleteSlotConfirm": "Hay clases que usan esta fila y se eliminarán. ¿Continuar?", "noSlots": "Aún no hay clases definidas.", "loadCal": "Cargar un calendario escolar", "calRegion": "Región oficial", "calFile": "Archivo .ics", "country": "País", "load": "Cargar", "loading": "Cargando…", "replaceCal": "Reemplazar", "mergeCal": "Añadir", "chooseFile": "Elegir un archivo .ics", "clearCal": "Vaciar el calendario", "clearCalConfirm": "¿Eliminar todas las vacaciones y todos los festivos?", "calIntro": "Carga el calendario oficial de tu región, importa el de tu centro (.ics) o introduce tus fechas abajo.", "icsHint": "Muchos centros, ayuntamientos y administraciones publican su calendario en formato .ics (iCalendar). Los eventos de varios días se convierten en vacaciones y los de un día en días libres.", "netFail": "No se han podido cargar las vacaciones (sin conexión o datos aún no publicados). Los festivos se han calculado; completa a mano o con un archivo .ics.", "caNote": "En Canadá las vacaciones dependen del distrito escolar: importa su archivo .ics o añádelas a mano. Los festivos de la provincia se calculan automáticamente.", "checkNote": "Comprueba siempre estas fechas con el calendario oficial de tu centro.", "nothingFound": "No se han encontrado fechas en este archivo.", "calSummary": "{v} periodos de vacaciones · {h} festivos", "calRegionBtn": "Cargar el calendario de mi región", "apply": "Aplicar", "dayTitle": "Jornada", "dayStart": "Inicio de la jornada", "dayEnd": "Fin de la jornada", "dayHint": "Cambiar el inicio desplaza todas las clases y descansos; cambiar el fin modifica la última fila. Toca «Aplicar». Cada fila sigue siendo editable abajo.", "search": "Buscar", "searchPh": "Buscar en todas las notas…", "noResults": "Sin resultados.", "checklist": "Lista de tareas", "template": "Insertar una plantilla", "tab_templates": "Plantillas", "templatesHint": "El texto antes de «:» se pone en negrita. Inserta una plantilla con el botón de la barra de herramientas.", "newTemplate": "Nueva plantilla", "manage": "Gestionar plantillas", "tplNames": ["Plan de clase", "Evaluación"], "tplBodies": ["Objetivos:\nMaterial:\nDesarrollo:\nDeberes:", "Tema:\nCriterios:\nBaremo:\nObservaciones:"], "rotation": "Semanas A/B", "rotationHint": "Para horarios que alternan cada dos semanas. Las semanas completas de vacaciones no cuentan.", "off": "Desactivado", "on": "Activado", "firstWeek": "Primera semana del curso", "weeksLbl": "Semanas", "everyWeek": "Todas", "weekA": "Semana A", "weekB": "Semana B", "shiftFwd": "Desplazar las notas →", "shiftFwdHint": "Clase cancelada: cada nota de este curso (misma asignatura y grupo) pasa a la clase siguiente.", "shiftBack": "← Retroceder las notas", "shiftBackHint": "Cada nota siguiente retrocede una clase; la nota de esta clase se reemplaza.", "shiftBackConfirm": "La nota de esta clase se reemplazará por la siguiente. ¿Continuar?", "copyNext": "Copiar a la próxima clase", "copyNextHint": "Añade esta nota a la próxima clase de este curso.", "editLessonHint": "Asignatura, horario, grupo, aula, semanas A/B.", "shiftedFwd": "Notas desplazadas una clase.", "shiftedBack": "Notas retrocedidas una clase.", "copied": "Nota copiada al {d}.", "noNext": "No hay clase siguiente en el curso escolar.", "notInYear": "Esta semana está fuera del curso escolar definido.", "undoAction": "Deshacer", "emptyNote": "Esta nota está vacía.", "goToWeek": "Ir a la semana", "backupHint": "Ninguna copia exportada desde hace {n} días.", "backupNever": "Todavía no has exportado ninguna copia de seguridad.", "later": "Más tarde", "autoBackups": "Copias automáticas", "autoBackupsHint": "Cada semana se guarda una copia completa en este dispositivo (las 8 últimas). Desaparece si se desinstala la app: exporta también de vez en cuando.", "restore": "Restaurar", "restoreConfirm": "¿Reemplazar todos tus datos por esta copia?", "noBackups": "Todavía no hay copias automáticas.", "lastExport": "Última exportación: {d}", "never": "nunca", "webBackupHint": "En el ordenador, el navegador guarda tus datos: exporta una copia regularmente.", "profile": "Perfil", "stepProfile": "Eres…", "prof_teacher": "Docente", "prof_teacher_d": "Clases, grupos, planes de clase", "prof_student": "Estudiante", "prof_student_d": "Horario, deberes, exámenes", "prof_coach": "Formador o entrenador", "prof_coach_d": "Sesiones, grupos, lugares", "prof_personal": "Uso personal", "prof_personal_d": "Semana tipo, actividades, citas", "profileHint": "Adapta el vocabulario (asignatura, grupo, aula…). Tus datos no cambian.", "tasks": "Deberes y plazos", "newTask": "Nuevo plazo", "editTask": "Editar plazo", "taskTitle": "Título", "due": "Para el", "kind_homework": "Deberes", "kind_exam": "Examen", "kind_task": "Tarea", "noTasks": "Nada pendiente por ahora.", "overdue": "Atrasado", "tomorrow": "Mañana", "upcoming": "Próximamente", "doneLbl": "Hechas", "addTaskForLesson": "Añadir deberes o un examen", "addTaskHint": "Para la próxima clase de este curso.", "reminders": "Recordatorios", "remindersHint": "Aviso antes de cada clase y a las 18 h la víspera de los exámenes (app instalada).", "remindOff": "Sin recordatorio", "minBefore": "{n} min antes", "notifExamTitle": "Examen mañana", "notifDenied": "Notificaciones bloqueadas: permítelas en los ajustes del dispositivo.", "more": "Más", "exportPdf": "Exportar la semana en PDF", "exportPdfHint": "Para imprimir o compartir.", "exportIcs": "Exportar a mi calendario (.ics)", "exportIcsHint": "Todas las clases del año y los plazos, para Calendario de Apple, Google Calendar u Outlook.", "pdfFail": "No se pudo crear el PDF.", "region": "Región", "national": "Todo el país", "regionsFail": "Lista de regiones no disponible (sin conexión). Solo se cargarán los datos nacionales.", "onlineNote": "Datos públicos en línea (OpenHolidays): compruébalos.", "ohFail": "No se pudieron cargar los datos (¿sin conexión?). Importa un archivo .ics o introduce tus fechas a mano."},
+  pt: {"title": "Planeamento semanal", "today": "Hoje", "day": "Dia", "week": "Semana", "wk": "Semana", "prevWeek": "Semana anterior", "nextWeek": "Semana seguinte", "settings": "Definições", "save": "Guardar", "cancel": "Cancelar", "delete": "Eliminar", "ok": "OK", "confirm": "Confirmação", "add": "Adicionar", "saved": "Guardado", "saving": "A guardar…", "font": "Tipo de letra", "fontDefault": "Padrão", "size": "Tamanho", "bold": "Negrito", "italic": "Itálico", "underline": "Sublinhado", "strike": "Rasurado", "boldL": "N", "italicL": "I", "underlineL": "S", "textColor": "Cor do texto", "highlight": "Realce", "bullets": "Lista com marcas", "numbered": "Lista numerada", "alignL": "Alinhar à esquerda", "alignC": "Centrar", "alignR": "Alinhar à direita", "link": "Inserir uma ligação", "clear": "Limpar formatação", "undo": "Anular", "redo": "Refazer", "pickCell": "Toque primeiro numa célula de notas.", "linkUrl": "Endereço da ligação", "openLink": "Abrir", "removeLink": "Remover ligação", "custom": "Personalizada", "presets": "Paleta", "recent": "Recentes", "none": "Nenhuma", "color": "Cor", "holiday": "Feriado", "vacation": "Férias", "type_lesson": "Aula", "type_break": "Intervalo", "type_lunch": "Almoço", "type_admin": "Tempo administrativo", "type_other": "Outro", "tab_general": "Geral", "tab_slots": "Aulas e intervalos", "tab_subjects": "Disciplinas", "tab_timetable": "Horário", "tab_year": "Ano letivo", "tab_data": "Dados", "yourName": "O seu nome (opcional)", "language": "Idioma", "theme": "Tema", "daysShown": "Dias apresentados", "timeFormat": "Formato da hora", "noteFont": "Tipo de letra predefinido das notas", "generator": "Gerador rápido", "genHint": "Crie o seu dia inteiro com um clique e depois ajuste cada linha.", "firstStart": "Início da 1.ª aula", "lessonDur": "Duração de uma aula (min)", "lessonCount": "Número de aulas", "gapDur": "Mudança entre aulas (min)", "breakDur": "Duração dos intervalos (min)", "breakAfter": "Intervalo depois das aulas n.º", "lunchAfter": "Almoço depois da aula n.º (0 = nenhum)", "lunchDur": "Duração do almoço (min)", "generate": "Gerar", "genConfirm": "Substituir as aulas e intervalos atuais? As suas aulas e notas são mantidas sempre que possível.", "label": "Etiqueta", "start": "Início", "end": "Fim", "type": "Tipo", "subject": "Disciplina", "short": "Abrev.", "newSubject": "Nova disciplina", "class": "Turma", "room": "Sala", "from": "De", "to": "A", "addLesson": "Adicionar uma aula", "editLesson": "Editar a aula", "lessonRepeats": "Esta aula repete-se todas as semanas.", "ttHint": "Dica: na grelha, toque em ＋ numa célula vazia para adicionar uma aula, ou toque no cabeçalho de uma aula para a editar.", "noLessons": "Sem aulas neste dia.", "overlapLesson": "Este horário sobrepõe-se a outra aula.", "pickSubject": "Escolha uma disciplina.", "yearStart": "Primeiro dia", "yearEnd": "Último dia", "vacations": "Férias", "holidays": "Feriados", "name": "Nome", "date": "Data", "export": "Exportar uma cópia de segurança", "import": "Importar uma cópia de segurança", "exported": "Cópia exportada.", "exportFail": "A exportação falhou.", "importOk": "Importação concluída.", "importBad": "Ficheiro inválido.", "importConfirm": "Substituir todos os seus dados pelos do ficheiro?", "reset": "Apagar tudo", "resetConfirm": "Apagar definitivamente todos os dados deste dispositivo?", "privacy": "Os seus dados ficam apenas neste dispositivo. Não é necessária conta nem ligação à Internet. Exporte uma cópia de segurança de vez em quando.", "welcome": "Bem-vindo", "welcomeSub": "O seu planeamento de aulas, semana após semana.", "chooseLang": "Escolha o seu idioma", "next": "Seguinte", "back": "Voltar", "finish": "Começar", "stepLook": "Personalize", "stepDay": "O seu dia típico", "stepYear": "O seu ano letivo", "haveBackup": "Já tenho uma cópia de segurança", "yearHint": "Férias e feriados: Definições › Ano letivo.", "notes": "Notas…", "addHere": "Adicionar uma aula aqui", "welcomeTip": "Toque em ＋ numa célula para adicionar as suas aulas.", "deleteSubjectConfirm": "Esta disciplina é usada por {n} aulas, que serão eliminadas. Continuar?", "deleteSlotConfirm": "Há aulas que usam esta linha e serão eliminadas. Continuar?", "noSlots": "Ainda não há aulas definidas.", "loadCal": "Carregar um calendário escolar", "calRegion": "Região oficial", "calFile": "Ficheiro .ics", "country": "País", "load": "Carregar", "loading": "A carregar…", "replaceCal": "Substituir", "mergeCal": "Adicionar", "chooseFile": "Escolher um ficheiro .ics", "clearCal": "Esvaziar o calendário", "clearCalConfirm": "Eliminar todas as férias e todos os feriados?", "calIntro": "Carregue o calendário oficial da sua região, importe o da sua escola (.ics) ou introduza as datas abaixo.", "icsHint": "Muitas escolas, municípios e serviços publicam o calendário em formato .ics (iCalendar). Os eventos de vários dias tornam-se férias e os de um dia, dias de folga.", "netFail": "Não foi possível carregar as férias (sem ligação ou dados ainda não publicados). Os feriados foram calculados; complete à mão ou com um ficheiro .ics.", "caNote": "No Canadá, as férias dependem do conselho escolar: importe o respetivo ficheiro .ics ou adicione-as à mão. Os feriados da província são calculados automaticamente.", "checkNote": "Confirme sempre estas datas com o calendário oficial da sua escola.", "nothingFound": "Nenhuma data encontrada neste ficheiro.", "calSummary": "{v} períodos de férias · {h} feriados", "calRegionBtn": "Carregar o calendário da minha região", "apply": "Aplicar", "dayTitle": "Dia", "dayStart": "Início do dia", "dayEnd": "Fim do dia", "dayHint": "Mudar o início desloca todas as aulas e intervalos; mudar o fim altera a última linha. Toque em «Aplicar». Cada linha continua editável abaixo.", "search": "Pesquisar", "searchPh": "Pesquisar em todas as notas…", "noResults": "Sem resultados.", "checklist": "Lista de tarefas", "template": "Inserir um modelo", "tab_templates": "Modelos", "templatesHint": "O texto antes de «:» fica a negrito. Insira um modelo com o botão da barra de ferramentas.", "newTemplate": "Novo modelo", "manage": "Gerir modelos", "tplNames": ["Plano de aula", "Avaliação"], "tplBodies": ["Objetivos:\nMaterial:\nDesenvolvimento:\nTrabalho de casa:", "Tema:\nCritérios:\nCotação:\nObservações:"], "rotation": "Semanas A/B", "rotationHint": "Para horários que alternam semana sim, semana não. As semanas inteiras de férias não contam.", "off": "Desativado", "on": "Ativado", "firstWeek": "Primeira semana do ano", "weeksLbl": "Semanas", "everyWeek": "Todas", "weekA": "Semana A", "weekB": "Semana B", "shiftFwd": "Adiar as notas →", "shiftFwdHint": "Aula cancelada: cada nota desta disciplina (mesma disciplina e turma) passa para a aula seguinte.", "shiftBack": "← Recuar as notas", "shiftBackHint": "Cada nota seguinte recua uma aula; a nota desta aula é substituída.", "shiftBackConfirm": "A nota desta aula será substituída pela seguinte. Continuar?", "copyNext": "Copiar para a próxima aula", "copyNextHint": "Adiciona esta nota à próxima aula desta disciplina.", "editLessonHint": "Disciplina, horário, turma, sala, semanas A/B.", "shiftedFwd": "Notas adiadas uma aula.", "shiftedBack": "Notas recuadas uma aula.", "copied": "Nota copiada para {d}.", "noNext": "Não há aula seguinte no ano letivo.", "notInYear": "Esta semana está fora do ano letivo definido.", "undoAction": "Anular", "emptyNote": "Esta nota está vazia.", "goToWeek": "Ir para a semana", "backupHint": "Nenhuma cópia exportada há {n} dias.", "backupNever": "Ainda nunca exportou uma cópia de segurança.", "later": "Mais tarde", "autoBackups": "Cópias automáticas", "autoBackupsHint": "Todas as semanas é guardada uma cópia completa neste dispositivo (as 8 últimas). Desaparece se a app for desinstalada: exporte também de vez em quando.", "restore": "Restaurar", "restoreConfirm": "Substituir todos os seus dados por esta cópia?", "noBackups": "Ainda não há cópias automáticas.", "lastExport": "Última exportação: {d}", "never": "nunca", "webBackupHint": "No computador, o navegador guarda os seus dados: exporte regularmente uma cópia.", "profile": "Perfil", "stepProfile": "É…", "prof_teacher": "Professor(a)", "prof_teacher_d": "Aulas, turmas, planos de aula", "prof_student": "Aluno(a) ou estudante", "prof_student_d": "Horário, trabalhos de casa, testes", "prof_coach": "Formador ou treinador", "prof_coach_d": "Sessões, grupos, locais", "prof_personal": "Uso pessoal", "prof_personal_d": "Semana tipo, atividades, compromissos", "profileHint": "Adapta o vocabulário (disciplina, turma, sala…). Os seus dados não mudam.", "tasks": "Trabalhos e prazos", "newTask": "Novo prazo", "editTask": "Editar prazo", "taskTitle": "Título", "due": "Para", "kind_homework": "Trabalho de casa", "kind_exam": "Teste", "kind_task": "Tarefa", "noTasks": "Nada pendente por agora.", "overdue": "Em atraso", "tomorrow": "Amanhã", "upcoming": "Próximos", "doneLbl": "Concluídas", "addTaskForLesson": "Adicionar trabalho de casa ou teste", "addTaskHint": "Para a próxima aula desta disciplina.", "reminders": "Lembretes", "remindersHint": "Notificação antes de cada aula e às 18 h na véspera dos testes (app instalada).", "remindOff": "Sem lembrete", "minBefore": "{n} min antes", "notifExamTitle": "Teste amanhã", "notifDenied": "Notificações bloqueadas: permita-as nas definições do dispositivo.", "more": "Mais", "exportPdf": "Exportar a semana em PDF", "exportPdfHint": "Para imprimir ou partilhar.", "exportIcs": "Exportar para o meu calendário (.ics)", "exportIcsHint": "Todas as aulas do ano e os prazos, para o Calendário Apple, Google Calendar ou Outlook.", "pdfFail": "Não foi possível criar o PDF.", "region": "Região", "national": "Todo o país", "regionsFail": "Lista de regiões indisponível (sem ligação). Só serão carregados os dados nacionais.", "onlineNote": "Dados públicos online (OpenHolidays): verifique-os.", "ohFail": "Não foi possível carregar os dados (sem ligação?). Importe um ficheiro .ics ou introduza as datas à mão."}
 };
 let LANG = 'fr';
-const LOCALE = { fr: 'fr-CH', de: 'de-CH', en: 'en-GB' };
-const LANGS = [['fr', 'FR', 'Français'], ['de', 'DE', 'Deutsch'], ['en', 'EN', 'English']];
-function t(k, vars) { let s = (I18N[LANG] && I18N[LANG][k]) ?? I18N.en[k] ?? k; if (vars) for (const v in vars) s = s.replace('{' + v + '}', vars[v]); return s; }
+const LOCALE = { fr: 'fr-CH', de: 'de-CH', en: 'en-GB', it: 'it-CH', es: 'es-ES', pt: 'pt-PT' };
+const LANGS = [['fr', 'FR', 'Français'], ['de', 'DE', 'Deutsch'], ['en', 'EN', 'English'], ['it', 'IT', 'Italiano'], ['es', 'ES', 'Español'], ['pt', 'PT', 'Português']];
+let PROF = 'teacher';
+const PO = {"student": {"fr": {"title": "Mon horaire", "welcomeSub": "Vos cours, devoirs et examens, semaine après semaine.", "subject": "Matière", "newSubject": "Nouvelle matière", "class": "Enseignant·e", "tab_subjects": "Matières", "pickSubject": "Choisissez une matière.", "tplNames": ["Devoirs", "Révision"], "tplBodies": ["À faire :\nPour le :\nMatériel :", "Chapitres :\nExercices :\nQuestions à poser :"]}, "de": {"title": "Mein Stundenplan", "welcomeSub": "Deine Lektionen, Hausaufgaben und Prüfungen, Woche für Woche.", "subject": "Fach", "newSubject": "Neues Fach", "class": "Lehrperson", "tab_subjects": "Fächer", "pickSubject": "Wähle ein Fach.", "tplNames": ["Hausaufgaben", "Lernen"], "tplBodies": ["Zu erledigen:\nBis:\nMaterial:", "Kapitel:\nÜbungen:\nFragen:"]}, "en": {"title": "My timetable", "welcomeSub": "Your classes, homework and exams, week after week.", "subject": "Subject", "newSubject": "New subject", "class": "Teacher", "tab_subjects": "Subjects", "pickSubject": "Choose a subject.", "tplNames": ["Homework", "Revision"], "tplBodies": ["To do:\nDue:\nMaterials:", "Chapters:\nExercises:\nQuestions to ask:"]}, "it": {"title": "Il mio orario", "welcomeSub": "Lezioni, compiti e verifiche, settimana dopo settimana.", "subject": "Materia", "newSubject": "Nuova materia", "class": "Docente", "tab_subjects": "Materie", "pickSubject": "Scegli una materia.", "tplNames": ["Compiti", "Ripasso"], "tplBodies": ["Da fare:\nPer il:\nMateriale:", "Capitoli:\nEsercizi:\nDomande da fare:"]}, "es": {"title": "Mi horario", "welcomeSub": "Tus clases, deberes y exámenes, semana tras semana.", "subject": "Asignatura", "newSubject": "Nueva asignatura", "class": "Profesor/a", "tab_subjects": "Asignaturas", "pickSubject": "Elige una asignatura.", "tplNames": ["Deberes", "Repaso"], "tplBodies": ["Por hacer:\nPara el:\nMaterial:", "Temas:\nEjercicios:\nPreguntas:"]}, "pt": {"title": "O meu horário", "welcomeSub": "As tuas aulas, trabalhos e testes, semana após semana.", "subject": "Disciplina", "newSubject": "Nova disciplina", "class": "Professor(a)", "tab_subjects": "Disciplinas", "pickSubject": "Escolhe uma disciplina.", "tplNames": ["Trabalho de casa", "Estudo"], "tplBodies": ["A fazer:\nPara:\nMaterial:", "Capítulos:\nExercícios:\nDúvidas:"]}}, "coach": {"fr": {"title": "Planification des séances", "welcomeSub": "Vos séances et groupes, semaine après semaine.", "subject": "Activité", "newSubject": "Nouvelle activité", "class": "Groupe", "room": "Lieu", "tab_subjects": "Activités", "addLesson": "Ajouter une séance", "editLesson": "Modifier la séance", "addHere": "Ajouter une séance ici", "pickSubject": "Choisissez une activité.", "type_lesson": "Séance", "tab_year": "Saison", "stepYear": "Votre saison", "tplNames": ["Séance", "Suivi"], "tplBodies": ["Objectif :\nÉchauffement :\nPartie principale :\nRetour au calme :\nMatériel :", "Présents :\nPoints forts :\nÀ travailler :"], "subjects": ["Entraînement", "Cours collectif", "Cours privé", "Atelier", "Préparation", "Réunion"]}, "de": {"title": "Trainingsplanung", "welcomeSub": "Ihre Trainings und Gruppen, Woche für Woche.", "subject": "Aktivität", "newSubject": "Neue Aktivität", "class": "Gruppe", "room": "Ort", "tab_subjects": "Aktivitäten", "addLesson": "Training hinzufügen", "editLesson": "Training bearbeiten", "addHere": "Hier Training hinzufügen", "pickSubject": "Wählen Sie eine Aktivität.", "type_lesson": "Einheit", "tab_year": "Saison", "stepYear": "Ihre Saison", "tplNames": ["Training", "Auswertung"], "tplBodies": ["Ziel:\nAufwärmen:\nHauptteil:\nAusklang:\nMaterial:", "Anwesend:\nStärken:\nZu üben:"], "subjects": ["Training", "Gruppenkurs", "Einzelunterricht", "Workshop", "Vorbereitung", "Sitzung"]}, "en": {"title": "Session planner", "welcomeSub": "Your sessions and groups, week after week.", "subject": "Activity", "newSubject": "New activity", "class": "Group", "room": "Venue", "tab_subjects": "Activities", "addLesson": "Add a session", "editLesson": "Edit session", "addHere": "Add a session here", "pickSubject": "Choose an activity.", "type_lesson": "Session", "tab_year": "Season", "stepYear": "Your season", "tplNames": ["Session", "Review"], "tplBodies": ["Goal:\nWarm-up:\nMain part:\nCool-down:\nEquipment:", "Attendance:\nStrengths:\nTo work on:"], "subjects": ["Training", "Group class", "Private lesson", "Workshop", "Preparation", "Meeting"]}, "it": {"title": "Pianificazione delle sessioni", "welcomeSub": "Le tue sessioni e i tuoi gruppi, settimana dopo settimana.", "subject": "Attività", "newSubject": "Nuova attività", "class": "Gruppo", "room": "Luogo", "tab_subjects": "Attività", "addLesson": "Aggiungi una sessione", "editLesson": "Modifica la sessione", "addHere": "Aggiungi una sessione qui", "pickSubject": "Scegli un’attività.", "type_lesson": "Sessione", "tab_year": "Stagione", "stepYear": "La tua stagione", "tplNames": ["Sessione", "Valutazione"], "tplBodies": ["Obiettivo:\nRiscaldamento:\nParte principale:\nDefaticamento:\nMateriale:", "Presenti:\nPunti di forza:\nDa migliorare:"], "subjects": ["Allenamento", "Corso di gruppo", "Lezione privata", "Laboratorio", "Preparazione", "Riunione"]}, "es": {"title": "Planificación de sesiones", "welcomeSub": "Tus sesiones y grupos, semana tras semana.", "subject": "Actividad", "newSubject": "Nueva actividad", "class": "Grupo", "room": "Lugar", "tab_subjects": "Actividades", "addLesson": "Añadir una sesión", "editLesson": "Editar la sesión", "addHere": "Añadir una sesión aquí", "pickSubject": "Elige una actividad.", "type_lesson": "Sesión", "tab_year": "Temporada", "stepYear": "Tu temporada", "tplNames": ["Sesión", "Seguimiento"], "tplBodies": ["Objetivo:\nCalentamiento:\nParte principal:\nVuelta a la calma:\nMaterial:", "Asistentes:\nPuntos fuertes:\nA mejorar:"], "subjects": ["Entrenamiento", "Clase grupal", "Clase particular", "Taller", "Preparación", "Reunión"]}, "pt": {"title": "Planeamento de sessões", "welcomeSub": "As suas sessões e grupos, semana após semana.", "subject": "Atividade", "newSubject": "Nova atividade", "class": "Grupo", "room": "Local", "tab_subjects": "Atividades", "addLesson": "Adicionar uma sessão", "editLesson": "Editar a sessão", "addHere": "Adicionar uma sessão aqui", "pickSubject": "Escolha uma atividade.", "type_lesson": "Sessão", "tab_year": "Temporada", "stepYear": "A sua temporada", "tplNames": ["Sessão", "Acompanhamento"], "tplBodies": ["Objetivo:\nAquecimento:\nParte principal:\nRetorno à calma:\nMaterial:", "Presentes:\nPontos fortes:\nA melhorar:"], "subjects": ["Treino", "Aula de grupo", "Aula particular", "Workshop", "Preparação", "Reunião"]}}, "personal": {"fr": {"title": "Mon agenda de la semaine", "welcomeSub": "Votre semaine type, organisée simplement.", "subject": "Catégorie", "newSubject": "Nouvelle catégorie", "class": "Avec", "room": "Lieu", "tab_subjects": "Catégories", "addLesson": "Ajouter une activité", "editLesson": "Modifier l’activité", "addHere": "Ajouter une activité ici", "pickSubject": "Choisissez une catégorie.", "type_lesson": "Créneau", "tab_year": "Calendrier", "stepYear": "Votre calendrier", "tplNames": ["Réunion", "Journée"], "tplBodies": ["Ordre du jour :\nDécisions :\nÀ faire :", "Priorités :\nRendez-vous :\nNotes :"], "subjects": ["Travail", "Réunion", "Sport", "Famille", "Loisirs", "Rendez-vous"]}, "de": {"title": "Meine Woche", "welcomeSub": "Ihr Wochenablauf, einfach organisiert.", "subject": "Kategorie", "newSubject": "Neue Kategorie", "class": "Mit", "room": "Ort", "tab_subjects": "Kategorien", "addLesson": "Aktivität hinzufügen", "editLesson": "Aktivität bearbeiten", "addHere": "Hier Aktivität hinzufügen", "pickSubject": "Wählen Sie eine Kategorie.", "type_lesson": "Zeitfenster", "tab_year": "Kalender", "stepYear": "Ihr Kalender", "tplNames": ["Besprechung", "Tag"], "tplBodies": ["Traktanden:\nEntscheide:\nZu erledigen:", "Prioritäten:\nTermine:\nNotizen:"], "subjects": ["Arbeit", "Besprechung", "Sport", "Familie", "Freizeit", "Termin"]}, "en": {"title": "My weekly planner", "welcomeSub": "Your typical week, simply organised.", "subject": "Category", "newSubject": "New category", "class": "With", "room": "Place", "tab_subjects": "Categories", "addLesson": "Add an activity", "editLesson": "Edit activity", "addHere": "Add an activity here", "pickSubject": "Choose a category.", "type_lesson": "Slot", "tab_year": "Calendar", "stepYear": "Your calendar", "tplNames": ["Meeting", "Day"], "tplBodies": ["Agenda:\nDecisions:\nTo do:", "Priorities:\nAppointments:\nNotes:"], "subjects": ["Work", "Meeting", "Sport", "Family", "Leisure", "Appointment"]}, "it": {"title": "La mia settimana", "welcomeSub": "La tua settimana tipo, organizzata in modo semplice.", "subject": "Categoria", "newSubject": "Nuova categoria", "class": "Con", "room": "Luogo", "tab_subjects": "Categorie", "addLesson": "Aggiungi un’attività", "editLesson": "Modifica l’attività", "addHere": "Aggiungi un’attività qui", "pickSubject": "Scegli una categoria.", "type_lesson": "Fascia", "tab_year": "Calendario", "stepYear": "Il tuo calendario", "tplNames": ["Riunione", "Giornata"], "tplBodies": ["Ordine del giorno:\nDecisioni:\nDa fare:", "Priorità:\nAppuntamenti:\nNote:"], "subjects": ["Lavoro", "Riunione", "Sport", "Famiglia", "Tempo libero", "Appuntamento"]}, "es": {"title": "Mi semana", "welcomeSub": "Tu semana tipo, organizada de forma sencilla.", "subject": "Categoría", "newSubject": "Nueva categoría", "class": "Con", "room": "Lugar", "tab_subjects": "Categorías", "addLesson": "Añadir una actividad", "editLesson": "Editar la actividad", "addHere": "Añadir una actividad aquí", "pickSubject": "Elige una categoría.", "type_lesson": "Franja", "tab_year": "Calendario", "stepYear": "Tu calendario", "tplNames": ["Reunión", "Día"], "tplBodies": ["Orden del día:\nDecisiones:\nPor hacer:", "Prioridades:\nCitas:\nNotas:"], "subjects": ["Trabajo", "Reunión", "Deporte", "Familia", "Ocio", "Cita"]}, "pt": {"title": "A minha semana", "welcomeSub": "A sua semana tipo, organizada de forma simples.", "subject": "Categoria", "newSubject": "Nova categoria", "class": "Com", "room": "Local", "tab_subjects": "Categorias", "addLesson": "Adicionar uma atividade", "editLesson": "Editar a atividade", "addHere": "Adicionar uma atividade aqui", "pickSubject": "Escolha uma categoria.", "type_lesson": "Horário", "tab_year": "Calendário", "stepYear": "O seu calendário", "tplNames": ["Reunião", "Dia"], "tplBodies": ["Ordem de trabalhos:\nDecisões:\nA fazer:", "Prioridades:\nCompromissos:\nNotas:"], "subjects": ["Trabalho", "Reunião", "Desporto", "Família", "Lazer", "Compromisso"]}}};
+function tvFor(k, lang, prof) { const po = prof && prof !== 'teacher' && PO[prof] ? (PO[prof][lang] || PO[prof].en) : null; if (po && po[k] !== undefined) return po[k]; const d = I18N[lang] || I18N.en; return d[k] !== undefined ? d[k] : (I18N.en[k] !== undefined ? I18N.en[k] : k); }
+function t(k, vars) { let s = tvFor(k, LANG, PROF); if (typeof s !== 'string') return s; if (vars) for (const v in vars) s = s.replace('{' + v + '}', vars[v]); return s; }
+const L6 = a => a[{ fr: 0, de: 1, en: 2, it: 3, es: 4, pt: 5 }[LANG]] ?? a[2];
 
 /* ================= Thèmes ================= */
 const THEMES = {
@@ -528,6 +571,7 @@ const THEMES = {
 };
 
 /* ================= Constantes ================= */
+const THEME_X = {"midnight": ["Mezzanotte", "Medianoche", "Meia-noite"], "snow": ["Neve", "Nieve", "Neve"], "ocean": ["Oceano", "Océano", "Oceano"], "forest": ["Foresta", "Bosque", "Floresta"], "lavender": ["Lavanda", "Lavanda", "Lavanda"], "sunset": ["Tramonto", "Atardecer", "Pôr do sol"], "sand": ["Sabbia", "Arena", "Areia"], "contrast": ["Contrasto", "Contraste", "Contraste"]};
 const FONTS = [
   { id: 'system', label: null, stack: '-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,system-ui,sans-serif' },
   { id: 'aptos', label: 'Aptos', stack: 'Aptos,Calibri,"Segoe UI",sans-serif' },
@@ -554,6 +598,9 @@ const DEFAULT_SUBJECTS = {
   fr: ['Mathématiques', 'Français', 'Allemand', 'Anglais', 'Histoire', 'Géographie', 'Sciences', 'Éducation physique'],
   de: ['Mathematik', 'Deutsch', 'Französisch', 'Englisch', 'Geschichte', 'Geografie', 'Naturwissenschaften', 'Sport'],
   en: ['Mathematics', 'English', 'French', 'German', 'History', 'Geography', 'Science', 'PE'],
+  it: ["Matematica", "Italiano", "Francese", "Inglese", "Storia", "Geografia", "Scienze", "Educazione fisica"],
+  es: ["Matemáticas", "Lengua", "Inglés", "Francés", "Historia", "Geografía", "Ciencias", "Educación física"],
+  pt: ["Matemática", "Português", "Inglês", "Francês", "História", "Geografia", "Ciências", "Educação física"],
 };
 const TABS = [['general', 'settings'], ['slots', 'clock'], ['subjects', 'palette'], ['timetable', 'calendar'], ['templates', 'fileText'], ['year', 'sun'], ['data', 'download']];
 
@@ -596,6 +643,11 @@ const IC = {
   arrowL: '<line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/>',
   copy: '<rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>',
   edit: '<path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/>',
+  clipboard: '<path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1"/><path d="m9 14 2 2 4-4"/>',
+  more: '<circle cx="12" cy="12" r="1.5"/><circle cx="19" cy="12" r="1.5"/><circle cx="5" cy="12" r="1.5"/>',
+  bell: '<path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/>',
+  user: '<path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>',
+  printer: '<polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/>',
   wand: '<path d="M15 4V2"/><path d="M15 16v-2"/><path d="M8 9h2"/><path d="M20 9h2"/><path d="M17.8 11.8 19 13"/><path d="M17.8 6.2 19 5"/><path d="m3 21 9-9"/><path d="M12.2 6.2 11 5"/>',
   shield: '<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>',
 };
@@ -667,22 +719,26 @@ function genSlots(o) {
   return slots;
 }
 function applyGen(old, nw) { const pools = {}; old.slice().sort(bySt).forEach(s => (pools[s.type] = pools[s.type] || []).push(s.id)); nw.forEach(s => { const p = pools[s.type]; if (p && p.length) s.id = p.shift(); }); return nw; }
-function defaultConfig(lang) {
-  const gen = defaultGen();
+function genFor(profile) { return profile === 'coach' || profile === 'personal' ? { start: '08:00', dur: 60, count: 9, gap: 0, breakDur: 0, breakAfter: [], lunchAfter: 4, lunchDur: 60 } : defaultGen(); }
+function defaultConfig(lang, profile = 'teacher') {
+  const g = k => tvFor(k, lang, profile);
+  const gen = genFor(profile);
+  const subs = (profile === 'coach' || profile === 'personal') ? g('subjects') : (DEFAULT_SUBJECTS[lang] || DEFAULT_SUBJECTS.en);
   return { v: 2, lang, name: '', theme: 'midnight', days: [1, 2, 3, 4, 5], timeFmt: '24', font: { family: 'system', size: 14 }, gen, slots: genSlots(gen),
-    subjects: DEFAULT_SUBJECTS[lang].map((name, i) => ({ id: uid(), name, short: '', color: SUBJECT_COLORS[i % SUBJECT_COLORS.length] })),
+    subjects: subs.map((name, i) => ({ id: uid(), name, short: '', color: SUBJECT_COLORS[i % SUBJECT_COLORS.length] })), profile, tasks: [], remind: 0,
     lessons: [], year: defaultYear(), recentColors: [], rotation: { on: false, first: 'A' }, lastExport: null, lastSnapshot: null, remindAfter: null,
-    templates: I18N[lang].tplNames.map((name, i) => ({ id: uid(), name, body: I18N[lang].tplBodies[i] })) };
+    templates: g('tplNames').map((name, i) => ({ id: uid(), name, body: g('tplBodies')[i] })) };
 }
 function fixCfg(c) {
-  const lang = I18N[c && c.lang] ? c.lang : 'fr'; const d = defaultConfig(lang);
+  const lang = I18N[c && c.lang] ? c.lang : 'fr'; const d = defaultConfig(lang, (c && c.profile) || 'teacher');
   const out = { ...d, ...c, lang };
   out.font = { ...d.font, ...(c.font || {}) }; out.gen = { ...d.gen, ...(c.gen || {}) };
   out.year = { ...d.year, ...(c.year || {}) }; out.year.vacations = (c.year && c.year.vacations) || []; out.year.holidays = (c.year && c.year.holidays) || [];
-  for (const k of ['slots', 'subjects', 'lessons', 'days', 'recentColors', 'templates']) if (!Array.isArray(out[k])) out[k] = d[k];
+  for (const k of ['slots', 'subjects', 'lessons', 'days', 'recentColors', 'templates', 'tasks']) if (!Array.isArray(out[k])) out[k] = d[k];
   out.rotation = { ...d.rotation, ...(c.rotation || {}) };
   if (!out.days.length) out.days = [1, 2, 3, 4, 5];
   if (!THEMES[out.theme]) out.theme = 'midnight';
+  if (!PO[out.profile] && out.profile !== 'teacher') out.profile = 'teacher';
   return out;
 }
 let cfgTimer = null;
@@ -918,7 +974,8 @@ function renderHeader() {
       h('button', { class: 'btn today', onclick: goToday }, t('today')),
       h('div', { class: 'seg' }, hdr.segDay, hdr.segWeek),
       hdr.vt = h('button', { class: 'ib vt', onclick: () => setView(ui.view === 'day' ? 'week' : 'day') }, icon('columns')),
-      h('button', { class: 'ib', title: t('theme'), 'aria-label': t('theme'), onclick: e => themeMenu(e.currentTarget) }, icon('palette')),
+      h('button', { class: 'ib', title: t('tasks'), 'aria-label': t('tasks'), onclick: openTasks }, icon('clipboard'), hdr.badge = h('span', { class: 'badge' })),
+      h('button', { class: 'ib', title: t('more'), 'aria-label': t('more'), onclick: e => moreMenu(e.currentTarget) }, icon('more')),
       h('button', { class: 'ib', title: t('search'), 'aria-label': t('search'), onclick: openSearch }, icon('search')),
       h('button', { class: 'ib', title: t('settings'), 'aria-label': t('settings'), onclick: () => openSettings() }, icon('settings'))));
 }
@@ -927,6 +984,7 @@ function updateHeader() {
   const lt = weekLetter(ui.monday); hdr.wk.textContent = t('wk') + ' ' + isoWeek(ui.monday) + (lt ? ' · ' + lt : '');
   hdr.range.textContent = fmtDate(a, { day: 'numeric', month: 'short' }) + ' – ' + fmtDate(b, { day: 'numeric', month: 'short', year: 'numeric' });
   const vl = ui.view === 'day' ? t('week') : t('day'); hdr.vt.title = vl; hdr.vt.setAttribute('aria-label', vl);
+  const tdIso = todayISO(), soon = (cfg.tasks || []).filter(x => !x.done && x.due && x.due <= addDays(tdIso, 1)).length; hdr.badge.textContent = soon ? String(soon) : '';
   hdr.segDay.classList.toggle('on', ui.view === 'day'); hdr.segWeek.classList.toggle('on', ui.view === 'week');
 }
 function renderToolbar() {
@@ -960,13 +1018,13 @@ function renderToolbar() {
 function themeGrid(cur, onPick) {
   return h('div', { class: 'themes' }, Object.entries(THEMES).map(([id, th]) => h('button', { class: 'thc' + (id === cur ? ' on' : ''), onclick: () => onPick(id) },
     h('div', { class: 'thp', style: { background: th.v.bg, border: '1px solid ' + th.v.border } }, h('i', { style: { background: th.v.surface } }), h('i', { style: { background: `linear-gradient(${th.v.accent},${th.v.accent2})` } }), h('i', { style: { background: th.v.cell } })),
-    th.name[LANG])));
+    th.name[LANG] || (THEME_X[id] && THEME_X[id][{ it: 0, es: 1, pt: 2 }[LANG]]) || th.name.en)));
 }
 function themeMenu(anchor) { popover(anchor, h('div', { class: 'tm' }, h('div', { class: 'cp-lbl' }, t('theme')), themeGrid(cfg.theme, id => { cfg.theme = id; applyTheme(id); saveCfg(); closePop(); }))); }
 
 /* ================= Grille ================= */
 function renderApp() {
-  LANG = cfg.lang; document.documentElement.lang = LANG; applyTheme(cfg.theme); applyFont();
+  LANG = cfg.lang; PROF = cfg.profile || 'teacher'; document.documentElement.lang = LANG; applyTheme(cfg.theme); applyFont();
   closePop(); app.innerHTML = '';
   const main = h('main', { id: 'main', class: 'main' });
   app.append(h('div', { class: 'chrome' }, renderHeader(), renderToolbar()), main);
@@ -1000,7 +1058,7 @@ function renderDayTabs(days) {
   const td = todayISO();
   return h('div', { class: 'daytabs' }, days.map(d => { const iso = addDays(ui.monday, d - 1);
     return h('button', { class: 'dt' + (d === ui.day ? ' on' : '') + (iso === td ? ' today' : ''), onclick: () => { if (d === ui.day) return; ui.anim = d > ui.day ? 'l' : 'r'; ui.day = d; renderBody(); } },
-      h('span', { class: 'dtn' }, dayName(d, 'short').replace('.', '')), h('span', { class: 'dtd' }, parse(iso).getDate())); }));
+      dueOn(iso).length ? h('span', { class: 'dot' }) : null, h('span', { class: 'dtn' }, dayName(d, 'short').replace('.', '')), h('span', { class: 'dtd' }, parse(iso).getDate())); }));
 }
 function occupancy(dow, slots) {
   const idx = {}; slots.forEach((s, i) => idx[s.id] = i); const occ = {};
@@ -1037,7 +1095,7 @@ function renderGrid(days) {
   if (!single) days.forEach((d, i) => {
     const iso = addDays(ui.monday, d - 1);
     grid.append(h('div', { class: 'dayhead' + (iso === td ? ' today' : ''), style: { gridRow: '1', gridColumn: String(i + 2) } },
-      h('span', { class: 'dn' }, dayName(d, single ? 'long' : (innerWidth < 1100 ? 'short' : 'long'))), h('span', { class: 'dd' }, fmtDate(iso, { day: 'numeric', month: 'short' }))));
+      h('span', { class: 'dn' }, dayName(d, single ? 'long' : (innerWidth < 1100 ? 'short' : 'long'))), dueOn(iso).length ? h('button', { class: 'dhb', title: t('tasks'), onclick: openTasks }, dueOn(iso).length) : null, h('span', { class: 'dd' }, fmtDate(iso, { day: 'numeric', month: 'short' }))));
   });
   let n = 0;
   slots.forEach((s, ri) => {
@@ -1068,6 +1126,7 @@ function lessonCell(L, dow, slots, ri, span, col, R0) {
   const s0 = slots[ri], s1 = slots[ri + span - 1];
   return h('div', { class: 'cell lesson', style: { gridRow: `${ri + R0} / span ${span}`, gridColumn: col, '--c': sub.color, '--ct': sub.color + '22', '--cx': textOn(sub.color) }, 'data-day': String(dow), 'data-from': String(toMin(s0.start)), 'data-to': String(toMin(s1.end)) },
     h('button', { class: 'lh', title: t('editLesson'), onclick: e => lessonMenu(e.currentTarget, L, dow) }, h('span', { class: 'ln' }, sub.name), h('span', { class: 'lt' }, fmtTime(s0.start) + '–' + fmtTime(s1.end))),
+    taskChips(L, addDays(ui.monday, dow - 1)),
     (L.cls || L.room) ? h('div', { class: 'meta' }, L.cls ? h('span', { class: 'chip' }, icon('users', 12), L.cls) : null, L.room ? h('span', { class: 'chip' }, icon('pin', 12), L.room) : null) : null,
     noteEl(dow + '|' + L.from, t('notes')));
 }
@@ -1149,12 +1208,14 @@ function lessonDialog({ dow, from, lesson }) {
 function openSettings(tab) {
   const draft = clone(cfg); const prevLang = LANG; let saved = false; let cur = tab || 'general'; let ttDay = shownDays()[0];
   const m = modal('', h('div'), null, 'large');
-  m.onclose = () => { if (!saved) { LANG = prevLang; applyTheme(cfg.theme); } };
+  m.onclose = () => { if (!saved) { LANG = prevLang; PROF = cfg.profile || 'teacher'; applyTheme(cfg.theme); } };
   let rsT = null; const refreshSoon = () => { clearTimeout(rsT); rsT = setTimeout(() => { if (!m.card.contains(document.activeElement) || !document.activeElement.matches('input[type=time]')) refresh(); }, 120); };
   const refresh = () => { const sp = m.card.querySelector('.spanel'); const st = sp ? sp.scrollTop : 0; rebuild(); const n = m.card.querySelector('.spanel'); if (n) n.scrollTop = st; };
   const P = {
     general: () => h('div', null,
+      section(t('profile'), [profCards(draft.profile || 'teacher', id => { draft.profile = id; PROF = id; refresh(); }), h('p', { class: 'hint' }, t('profileHint'))]),
       section(t('yourName'), h('input', { class: 'inp', value: draft.name || '', oninput: e => draft.name = e.target.value })),
+      section(t('reminders'), [select([0, 5, 10, 15, 30, 60].map(n => [n, n ? t('minBefore', { n }) : t('remindOff')]), draft.remind || 0, v => draft.remind = +v), h('p', { class: 'hint' }, t('remindersHint'))]),
       section(t('language'), langCards(draft.lang, id => { draft.lang = id; LANG = id; refresh(); })),
       section(t('theme'), themeGrid(draft.theme, id => { draft.theme = id; applyTheme(id); refresh(); })),
       section(t('daysShown'), dayChips(draft.days, refresh)),
@@ -1293,7 +1354,7 @@ function openSettings(tab) {
     draft.lessons = draft.lessons.filter(l => ids.has(l.from) && sids.has(l.subjectId)).map(l => { if (!ids.has(l.to)) l.to = l.from; if (idx[l.to] < idx[l.from]) [l.from, l.to] = [l.to, l.from]; return l; });
     draft.year.vacations.sort((a, b) => (a.start || '').localeCompare(b.start || '')); draft.year.holidays.sort((a, b) => (a.date || '').localeCompare(b.date || ''));
     if (notesTimer) await flushNotes();
-    cfg = fixCfg(draft); saved = true; m.close(); await store.set(KEY_CFG, JSON.stringify(cfg));
+    cfg = fixCfg(draft); saved = true; m.close(); await store.set(KEY_CFG, JSON.stringify(cfg)); scheduleReminders();
     const L = weekList(); if (L.length && !L.includes(ui.monday)) { ui.monday = initialMonday(); await loadNotes(); }
     ui.anim = 'f'; renderApp(); toast('✓ ' + t('saved'));
   }
@@ -1335,7 +1396,7 @@ const HOL = {
 };
 const FRH = 'NY EM L1 V8 AS WM B14 AQ TS A11 XM';
 const REGIONS = {
-  CH: { name: ['Suisse', 'Schweiz', 'Switzerland'], label: ['Canton', 'Kanton', 'Canton'], list: [
+  CH: { name: ['Suisse', 'Schweiz', 'Switzerland', 'Svizzera', 'Suiza', 'Suíça'], label: ['Canton', 'Kanton', 'Canton', 'Cantone', 'Cantón', 'Cantão'], list: [
     ['AG', 'Argovie', 'Aargau', 'Aargau', 'NY B2 GF EM AS WM NAT XM SS'], ['AI', 'Appenzell Rhodes-Intérieures', 'Appenzell Innerrhoden', 'Appenzell Innerrhoden', 'NY GF EM AS WM CC NAT AQ TS IC XM SS'],
     ['AR', 'Appenzell Rhodes-Extérieures', 'Appenzell Ausserrhoden', 'Appenzell Ausserrhoden', 'NY GF EM AS WM NAT XM SS'], ['BL', 'Bâle-Campagne', 'Basel-Landschaft', 'Basel-Landschaft', 'NY GF EM L1 AS WM NAT XM SS'],
     ['BS', 'Bâle-Ville', 'Basel-Stadt', 'Basel-Stadt', 'NY GF EM L1 AS WM NAT XM SS'], ['BE', 'Berne', 'Bern', 'Bern', 'NY B2 GF EM AS WM NAT XM SS'],
@@ -1349,10 +1410,10 @@ const REGIONS = {
     ['TI', 'Tessin', 'Tessin', 'Ticino', 'NY EP SJ EM L1 AS WM CC PP NAT AQ TS IC XM SS'], ['UR', 'Uri', 'Uri', 'Uri', 'NY EP SJ GF EM AS WM CC NAT AQ TS IC XM SS'],
     ['VS', 'Valais', 'Wallis', 'Valais', 'NY SJ AS CC NAT AQ TS IC XM'], ['VD', 'Vaud', 'Waadt', 'Vaud', 'NY B2 GF EM AS WM NAT LJ XM'],
     ['ZG', 'Zoug', 'Zug', 'Zug', 'NY B2 GF EM AS WM CC NAT AQ TS IC XM SS'], ['ZH', 'Zurich', 'Zürich', 'Zurich', 'NY B2 GF EM L1 AS WM NAT XM SS']] },
-  FR: { name: ['France', 'Frankreich', 'France'], label: ['Zone', 'Zone', 'Zone'], list: [
+  FR: { name: ['France', 'Frankreich', 'France', 'Francia', 'Francia', 'França'], label: ['Zone', 'Zone', 'Zone', 'Zona', 'Zona', 'Zona'], list: [
     ['A', 'Zone A', 'Zone A', 'Zone A', FRH], ['B', 'Zone B', 'Zone B', 'Zone B', FRH], ['BAM', 'Zone B · Alsace-Moselle', 'Zone B · Elsass-Mosel', 'Zone B · Alsace-Moselle', FRH + ' GF SS'],
     ['C', 'Zone C', 'Zone C', 'Zone C', FRH], ['CORSE', 'Corse', 'Korsika', 'Corsica', FRH]] },
-  CA: { name: ['Canada', 'Kanada', 'Canada'], label: ['Province ou territoire', 'Provinz oder Territorium', 'Province or territory'], list: [
+  CA: { name: ['Canada', 'Kanada', 'Canada', 'Canada', 'Canadá', 'Canadá'], label: ['Province ou territoire', 'Provinz oder Territorium', 'Province or territory', 'Provincia o territorio', 'Provincia o territorio', 'Província ou território'], list: [
     ['AB', 'Alberta', 'Alberta', 'Alberta', 'NY FD GF VIC CD LD TG RD XM'], ['BC', 'Colombie-Britannique', 'Britisch-Kolumbien', 'British Columbia', 'NY FD GF VIC CD LD TR TG RD XM'],
     ['MB', 'Manitoba', 'Manitoba', 'Manitoba', 'NY LR GF VIC CD LD TR TG RD XM'], ['NB', 'Nouveau-Brunswick', 'New Brunswick', 'New Brunswick', 'NY FD GF VIC CD LD TG RD XM'],
     ['NL', 'Terre-Neuve-et-Labrador', 'Neufundland und Labrador', 'Newfoundland and Labrador', 'NY GF CD LD RD XM'], ['NS', 'Nouvelle-Écosse', 'Nova Scotia', 'Nova Scotia', 'NY HD GF CD LD RD XM'],
@@ -1362,18 +1423,24 @@ const REGIONS = {
     ['YT', 'Yukon', 'Yukon', 'Yukon', 'NY GF VIC NIP CD LD TR TG RD XM']] },
 };
 const FR_ACAD = { A: 'Besançon, Bordeaux, Clermont-Ferrand, Dijon, Grenoble, Limoges, Lyon, Poitiers', B: 'Aix-Marseille, Amiens, Lille, Nancy-Metz, Nantes, Nice, Normandie, Orléans-Tours, Reims, Rennes, Strasbourg', BAM: 'Nancy-Metz (Moselle), Strasbourg (Bas-Rhin, Haut-Rhin)', C: 'Créteil, Montpellier, Paris, Toulouse, Versailles', CORSE: 'Corse' };
-const LI = () => ({ fr: 1, de: 2, en: 3 }[LANG] || 1);
+const LI = () => ({ fr: 1, de: 2, en: 3 }[LANG] || 3);
+const HOLX = {"it": {"NY": "Capodanno", "B2": "San Bertoldo", "EP": "Epifania", "SJ": "San Giuseppe", "R1": "Anniversario della Repubblica", "NF": "Näfelser Fahrt", "GF": "Venerdì santo", "EM": "Lunedì di Pasqua", "L1": "Festa del lavoro", "V8": "Vittoria 1945", "AS": "Ascensione", "WM": "Lunedì di Pentecoste", "CC": "Corpus Domini", "PL": "Plebiscito giurassiano", "PP": "Santi Pietro e Paolo", "B14": "Festa nazionale francese", "NAT": "Festa nazionale svizzera", "AQ": "Assunzione", "JG": "Digiuno ginevrino", "LJ": "Lunedì del Digiuno federale", "BK": "San Nicolao della Flüe", "TS": "Ognissanti", "A11": "Armistizio 1918", "IC": "Immacolata Concezione", "XM": "Natale", "SS": "Santo Stefano", "R31": "Restaurazione della Repubblica", "FD": "Family Day", "LR": "Louis Riel Day", "HD": "Heritage Day", "ID": "Islander Day", "VIC": "Victoria Day", "PAT": "Giornata dei Patrioti", "SJB": "Festa nazionale del Québec", "NIP": "Giornata dei popoli autoctoni", "CD": "Festa del Canada", "NUD": "Nunavut Day", "LD": "Festa del lavoro", "TR": "Giornata della verità e riconciliazione", "TG": "Ringraziamento", "RD": "Giorno del ricordo", "BX": "Boxing Day"}, "es": {"NY": "Año Nuevo", "B2": "San Bertoldo", "EP": "Epifanía", "SJ": "San José", "R1": "Día de la República", "NF": "Näfelser Fahrt", "GF": "Viernes Santo", "EM": "Lunes de Pascua", "L1": "Día del Trabajo", "V8": "Victoria 1945", "AS": "Ascensión", "WM": "Lunes de Pentecostés", "CC": "Corpus Christi", "PL": "Plebiscito jurasiano", "PP": "San Pedro y San Pablo", "B14": "Fiesta nacional francesa", "NAT": "Fiesta nacional suiza", "AQ": "Asunción", "JG": "Ayuno de Ginebra", "LJ": "Lunes del Ayuno federal", "BK": "San Nicolás de Flüe", "TS": "Todos los Santos", "A11": "Armisticio 1918", "IC": "Inmaculada Concepción", "XM": "Navidad", "SS": "San Esteban", "R31": "Restauración de la República", "FD": "Día de la Familia", "LR": "Día de Louis Riel", "HD": "Heritage Day", "ID": "Islander Day", "VIC": "Día de Victoria", "PAT": "Día de los Patriotas", "SJB": "Fiesta nacional de Quebec", "NIP": "Día de los Pueblos Indígenas", "CD": "Día de Canadá", "NUD": "Día de Nunavut", "LD": "Día del Trabajo", "TR": "Día de la Verdad y la Reconciliación", "TG": "Acción de Gracias", "RD": "Día del Recuerdo", "BX": "Boxing Day"}, "pt": {"NY": "Ano Novo", "B2": "São Bertoldo", "EP": "Epifania", "SJ": "São José", "R1": "Dia da República", "NF": "Näfelser Fahrt", "GF": "Sexta-feira Santa", "EM": "Segunda-feira de Páscoa", "L1": "Dia do Trabalhador", "V8": "Vitória 1945", "AS": "Ascensão", "WM": "Segunda-feira de Pentecostes", "CC": "Corpo de Deus", "PL": "Plebiscito do Jura", "PP": "São Pedro e São Paulo", "B14": "Festa nacional francesa", "NAT": "Festa nacional suíça", "AQ": "Assunção", "JG": "Jejum de Genebra", "LJ": "Segunda-feira do Jejum federal", "BK": "São Nicolau de Flüe", "TS": "Todos os Santos", "A11": "Armistício 1918", "IC": "Imaculada Conceição", "XM": "Natal", "SS": "Santo Estêvão", "R31": "Restauração da República", "FD": "Dia da Família", "LR": "Dia de Louis Riel", "HD": "Heritage Day", "ID": "Islander Day", "VIC": "Dia de Vitória", "PAT": "Dia dos Patriotas", "SJB": "Festa nacional do Quebeque", "NIP": "Dia dos Povos Indígenas", "CD": "Dia do Canadá", "NUD": "Dia de Nunavut", "LD": "Dia do Trabalhador", "TR": "Dia da Verdade e Reconciliação", "TG": "Ação de Graças", "RD": "Dia da Memória", "BX": "Boxing Day"}};
+const CH_IT = {"AG": "Argovia", "AI": "Appenzello Interno", "AR": "Appenzello Esterno", "BL": "Basilea Campagna", "BS": "Basilea Città", "BE": "Berna", "FR": "Friburgo", "GE": "Ginevra", "GL": "Glarona", "GR": "Grigioni", "JU": "Giura", "LU": "Lucerna", "NE": "Neuchâtel", "NW": "Nidvaldo", "OW": "Obvaldo", "SG": "San Gallo", "SH": "Sciaffusa", "SZ": "Svitto", "SO": "Soletta", "TG": "Turgovia", "TI": "Ticino", "UR": "Uri", "VS": "Vallese", "VD": "Vaud", "ZG": "Zugo", "ZH": "Zurigo"};
+const ONLINE = {"BE": ["Belgique", "Belgien", "Belgium", "Belgio", "Bélgica", "Bélgica"], "LU": ["Luxembourg", "Luxemburg", "Luxembourg", "Lussemburgo", "Luxemburgo", "Luxemburgo"], "DE": ["Allemagne", "Deutschland", "Germany", "Germania", "Alemania", "Alemanha"], "AT": ["Autriche", "Österreich", "Austria", "Austria", "Austria", "Áustria"], "IT": ["Italie", "Italien", "Italy", "Italia", "Italia", "Itália"], "ES": ["Espagne", "Spanien", "Spain", "Spagna", "España", "Espanha"], "PT": ["Portugal", "Portugal", "Portugal", "Portogallo", "Portugal", "Portugal"], "NL": ["Pays-Bas", "Niederlande", "Netherlands", "Paesi Bassi", "Países Bajos", "Países Baixos"]};
+const rname = (country, r) => (LANG === 'it' && country === 'CH' && CH_IT[r[0]]) || r[LI()];
+const cname = k => L6((REGIONS[k] || { name: ONLINE[k] }).name);
 function computeHolidays(country, code, from, to) {
   const reg = REGIONS[country].list.find(r => r[0] === code); if (!reg) return [];
   const y0 = +from.slice(0, 4), y1 = +to.slice(0, 4), map = {};
-  for (const c of reg[4].split(' ')) { const H = HOL[c]; if (!H) continue; for (let y = y0; y <= y1; y++) { const d = H[0](y); if (d >= from && d <= to && dowOf(d) <= 6) map[d] = map[d] ? map[d] + ' / ' + H[LI()] : H[LI()]; } }
+  for (const c of reg[4].split(' ')) { const H = HOL[c]; if (!H) continue; for (let y = y0; y <= y1; y++) { const d = H[0](y); if (d >= from && d <= to && dowOf(d) <= 6) { const nm = (HOLX[LANG] && HOLX[LANG][c]) || H[LI()]; map[d] = map[d] ? map[d] + ' / ' + nm : nm; } } }
   return Object.keys(map).sort().map(date => ({ id: uid(), name: map[date], date }));
 }
 async function fetchJSON(url) { const r = await fetch(url, { headers: { Accept: 'application/json' } }); if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); }
 function pickName(arr) { if (typeof arr === 'string') return arr; if (!Array.isArray(arr) || !arr.length) return ''; const m = arr.find(n => String(n.language).toLowerCase() === LANG) || arr[0]; return (m && m.text) || ''; }
 const isSummer = (v, y) => { const m = +v.start.slice(5, 7); return v.start.startsWith(String(y)) && m >= 6 && m <= 8 && daysBetween(v.start, v.end) >= 25; };
-async function loadCH(code, y) {
-  const data = await fetchJSON(`https://openholidaysapi.org/SchoolHolidays?countryIsoCode=CH&subdivisionCode=CH-${code}&validFrom=${y}-06-01&validTo=${y + 1}-09-30&languageIsoCode=${LANG.toUpperCase()}`);
+async function loadCH(code, y) { return loadSchool('CH', 'CH-' + code, y); }
+async function loadSchool(country, sub, y) {
+  const data = await fetchJSON(`https://openholidaysapi.org/SchoolHolidays?countryIsoCode=${country}${sub ? '&subdivisionCode=' + sub : ''}&validFrom=${y}-06-01&validTo=${y + 1}-09-30&languageIsoCode=${LANG.toUpperCase()}`);
   const seen = new Set(), items = [];
   for (const x of Array.isArray(data) ? data : []) { const v = { name: pickName(x.name), start: String(x.startDate || '').slice(0, 10), end: String(x.endDate || x.startDate || '').slice(0, 10) }; if (!/^\d{4}-\d\d-\d\d$/.test(v.start) || !/^\d{4}-\d\d-\d\d$/.test(v.end)) continue; const k = v.start + v.end; if (seen.has(k)) continue; seen.add(k); items.push(v); }
   items.sort((a, b) => a.start.localeCompare(b.start));
@@ -1399,6 +1466,7 @@ async function loadFR(zone, y) {
   return { start, end, vacations };
 }
 async function buildRegionCalendar(country, code, y) {
+  if (ONLINE[country]) return loadOnline(country, code, y);
   let start = null, end = null, vacations = [], note = '';
   if (country === 'CA') { start = nextWeekday(addDays(nthDow(y, 9, 1, 1), 1)); end = prevWeekday(`${y + 1}-06-30`); }
   else { try { ({ start, end, vacations } = country === 'CH' ? await loadCH(code, y) : await loadFR(code, y)); } catch { vacations = []; } if (!vacations.length) note = t('netFail'); }
@@ -1425,13 +1493,13 @@ function parseICS(text) {
   out.vacations.sort((a, b) => a.start.localeCompare(b.start)); out.holidays.sort((a, b) => a.date.localeCompare(b.date));
   return out;
 }
-function guessCountry() { const l = (navigator.language || '').toUpperCase(); if (/-CA$/.test(l)) return 'CA'; if (/-FR$|-BE$/.test(l)) return 'FR'; if (/-CH$/.test(l)) return 'CH'; return LANG === 'en' ? 'CA' : LANG === 'de' ? 'CH' : 'FR'; }
+function guessCountry() { const l = (navigator.language || '').toUpperCase(), m = /-([A-Z]{2})$/.exec(l); if (m && (REGIONS[m[1]] || ONLINE[m[1]])) return m[1]; return { en: 'CA', de: 'CH', it: 'IT', es: 'ES', pt: 'PT' }[LANG] || 'FR'; }
 function calSummary(y) { return t('calSummary', { v: (y.vacations || []).length, h: (y.holidays || []).length }); }
 function fmtRangeD(a, b) { const o = { day: 'numeric', month: 'short' }; return a === b ? fmtDate(a, { ...o, year: 'numeric' }) : fmtDate(a, o) + ' – ' + fmtDate(b, { ...o, year: 'numeric' }); }
 function calendarDialog(cur, onApply) {
   const n = new Date(), Y0 = n.getMonth() >= 6 ? n.getFullYear() : n.getFullYear() - 1;
   const st = { src: 'region', country: guessCountry(), y: Y0, res: null, busy: false };
-  st.region = REGIONS[st.country].list[0][0];
+  st.region = REGIONS[st.country] ? REGIONS[st.country].list[0][0] : '';
   const body = h('div');
   const add = (el, ...k) => { for (const c of k.flat(Infinity)) if (c != null && c !== false) el.append(c); };
   const bReplace = h('button', { class: 'btn primary', onclick: () => apply(true) }, t('replaceCal'));
@@ -1449,13 +1517,16 @@ function calendarDialog(cur, onApply) {
     add(body, h('div', { class: 'seg', style: { marginBottom: '14px' } }, [['region', t('calRegion')], ['ics', t('calFile')]].map(([v, l]) => h('button', { class: 'seg-b' + (st.src === v ? ' on' : ''), onclick: () => { st.src = v; st.res = null; build(); } }, l))));
     if (st.src === 'region') {
       const RG = REGIONS[st.country];
+      if (!RG && !st.subs && !st.subsLoading) { st.subsLoading = true; fetchSubs(st.country).then(l => { st.subs = l; }).catch(() => { st.subs = []; st.subsFail = true; }).finally(() => { st.subsLoading = false; build(); }); }
       add(body, 
-        field(t('country'), select(Object.entries(REGIONS).map(([k, v]) => [k, v.name[LI() - 1]]), st.country, v => { st.country = v; st.region = REGIONS[v].list[0][0]; st.res = null; build(); })),
+        field(t('country'), select([...Object.keys(REGIONS), ...Object.keys(ONLINE)].map(k => [k, cname(k)]).sort((a, b) => a[1].localeCompare(b[1])), st.country, v => { st.country = v; st.region = REGIONS[v] ? REGIONS[v].list[0][0] : ''; st.subs = null; st.subsFail = false; st.res = null; build(); })),
         h('div', { class: 'grid2' },
-          field(RG.label[LI() - 1], select(RG.list.map(r => [r[0], r[LI()]]), st.region, v => { st.region = v; st.res = null; build(); })),
+          RG ? field(L6(RG.label), select(RG.list.map(r => [r[0], rname(st.country, r)]), st.region, v => { st.region = v; st.res = null; build(); }))
+             : field(t('region'), select([['', t('national')], ...(st.subs || [])], st.region, v => { st.region = v; st.res = null; build(); })),
           field(t('tab_year'), select([Y0 - 1, Y0, Y0 + 1].map(y => [y, `${y}–${y + 1}`]), st.y, v => { st.y = +v; st.res = null; build(); }))),
         st.country === 'FR' ? h('p', { class: 'hint' }, FR_ACAD[st.region]) : null,
         st.country === 'CA' ? h('p', { class: 'hint' }, t('caNote')) : null,
+        st.subsFail ? h('p', { class: 'hint warnText' }, t('regionsFail')) : null,
         h('button', { class: 'btn soft', disabled: st.busy, onclick: async () => { st.busy = true; build(); try { st.res = await buildRegionCalendar(st.country, st.region, st.y); } finally { st.busy = false; build(); } } }, icon('download', 16), st.busy ? t('loading') : t('load')));
     } else {
       add(body, h('p', { class: 'hint' }, t('icsHint')), h('button', { class: 'btn soft', onclick: () => {
@@ -1540,7 +1611,8 @@ function lessonMenu(anchor, L, dow) {
     item('edit', t('editLesson'), t('editLessonHint'), () => lessonDialog({ dow, from: L.from, lesson: L })),
     item('arrowR', t('shiftFwd'), t('shiftFwdHint'), () => shiftSeries(L, dow, 1)),
     item('arrowL', t('shiftBack'), t('shiftBackHint'), () => shiftSeries(L, dow, -1)),
-    item('copy', t('copyNext'), t('copyNextHint'), () => copyToNext(L, dow))));
+    item('copy', t('copyNext'), t('copyNextHint'), () => copyToNext(L, dow)),
+    item('clipboard', t('addTaskForLesson'), t('addTaskHint'), () => { const occ = seriesOf(L), k = occ.findIndex(o => o.m === ui.monday && o.key === dow + '|' + L.from), nx = k >= 0 ? occ[k + 1] : null; taskDialog(null, { subjectId: L.subjectId, cls: L.cls || '', due: nx ? nx.date : addDays(todayISO(), 7) }); })));
 }
 function seriesOf(L) {
   const key = l => l.subjectId + '|' + String(l.cls || '').trim().toLowerCase(), k = key(L);
@@ -1639,6 +1711,179 @@ async function checkBackupReminder() {
   ui.backupDays = cfg.lastExport ? daysBetween(cfg.lastExport, td) : -1; renderBody();
 }
 
+
+/* ================= Profils, échéances, rappels, exports ================= */
+const PROFILES = [['teacher', 'book'], ['student', 'edit'], ['coach', 'star'], ['personal', 'user']];
+function profCards(cur, onPick) {
+  return h('div', { class: 'profs' }, PROFILES.map(([id, ic]) => h('button', { class: 'pc' + (cur === id ? ' on' : ''), onclick: () => onPick(id) }, icon(ic, 20), h('span', null, h('b', null, t('prof_' + id)), h('small', null, t('prof_' + id + '_d'))))));
+}
+function appendAll(el, ...k) { for (const c of k.flat(Infinity)) if (c != null && c !== false) el.append(c); return el; }
+const dueOn = iso => (cfg && cfg.tasks || []).filter(x => !x.done && x.due === iso);
+function taskChips(L, iso) {
+  const list = (cfg.tasks || []).filter(x => x.due === iso && x.subjectId === L.subjectId && (!x.cls || !L.cls || x.cls.trim().toLowerCase() === L.cls.trim().toLowerCase()));
+  if (!list.length) return null;
+  return h('div', { class: 'tkchips' }, list.map(x => h('button', { class: 'tkchip k-' + x.kind + (x.done ? ' done' : ''), title: t('kind_' + x.kind), onclick: () => taskDialog(x, {}) }, icon(x.kind === 'exam' ? 'star' : 'clipboard', 12), x.title)));
+}
+function afterTasks() { saveCfg(); if (hdr.badge) updateHeader(); if (document.getElementById('main')) renderBody(); scheduleReminders(); }
+function openTasks() {
+  let showDone = false; const body = h('div');
+  const m = modal(t('tasks'), body, [h('span', { class: 'sp' }), h('button', { class: 'btn primary', onclick: () => taskDialog(null, {}, draw) }, icon('plus', 16), t('newTask'))], 'small');
+  function row(x) {
+    const sub = cfg.subjects.find(s => s.id === x.subjectId);
+    return h('div', { class: 'tkr' + (x.done ? ' done' : ''), style: { '--c': sub ? sub.color : 'transparent' } },
+      h('button', { class: 'tkc' + (x.done ? ' on' : ''), 'aria-label': '✓', onclick: () => { x.done = !x.done; afterTasks(); draw(); } }, x.done ? '✓' : ''),
+      h('button', { class: 'tkb', onclick: () => taskDialog(x, {}, draw) },
+        h('div', { class: 'tkt' }, h('span', { class: 'kchip k-' + x.kind }, t('kind_' + x.kind)), x.title),
+        h('div', { class: 'tks' }, [sub ? sub.name : null, x.cls || null, x.due ? cap(fmtDate(x.due, { weekday: 'short', day: 'numeric', month: 'short' })) : null].filter(Boolean).join(' · '))));
+  }
+  function draw() {
+    body.innerHTML = ''; const td = todayISO(), tm = addDays(td, 1);
+    const list = (cfg.tasks || []).slice().sort((a, b) => (a.due || '9').localeCompare(b.due || '9'));
+    const open = list.filter(x => !x.done), done = list.filter(x => x.done);
+    const groups = [[t('overdue'), open.filter(x => x.due && x.due < td), 'over'], [t('today'), open.filter(x => x.due === td)], [t('tomorrow'), open.filter(x => x.due === tm)], [t('upcoming'), open.filter(x => !x.due || x.due > tm)]];
+    let any = false;
+    for (const [title, arr, cls] of groups) if (arr.length) { any = true; appendAll(body, h('h4', { class: 'tkh ' + (cls || '') }, title + ' (' + arr.length + ')'), arr.map(row)); }
+    if (!any) body.append(h('p', { class: 'empty' }, t('noTasks')));
+    if (done.length) appendAll(body, h('button', { class: 'link', onclick: () => { showDone = !showDone; draw(); } }, (showDone ? '▾ ' : '▸ ') + t('doneLbl') + ' (' + done.length + ')'), showDone ? done.slice(-40).reverse().map(row) : null);
+  }
+  draw();
+}
+function taskDialog(x, preset, onDone) {
+  const isNew = !x; preset = preset || {};
+  const d = x ? { ...x } : { id: uid(), title: '', kind: 'homework', subjectId: preset.subjectId || '', cls: preset.cls || '', due: preset.due || addDays(todayISO(), 1), done: false };
+  const titleInp = h('input', { class: 'inp', value: d.title, placeholder: t('taskTitle'), oninput: e => d.title = e.target.value, onkeydown: e => { if (e.key === 'Enter') save(); } });
+  const body = h('div');
+  function build() {
+    body.innerHTML = '';
+    appendAll(body, field(t('taskTitle'), titleInp),
+      field(t('type'), h('div', { class: 'seg' }, ['homework', 'exam', 'task'].map(k => h('button', { class: 'seg-b' + (d.kind === k ? ' on' : ''), onclick: () => { d.kind = k; build(); } }, t('kind_' + k))))),
+      h('div', { class: 'grid2' },
+        field(t('subject'), select([['', '—'], ...cfg.subjects.map(s => [s.id, s.name])], d.subjectId, v => d.subjectId = v)),
+        field(t('due'), h('input', { class: 'inp', type: 'date', value: d.due || '', onchange: e => d.due = e.target.value }))),
+      field(t('class'), h('input', { class: 'inp', value: d.cls || '', oninput: e => d.cls = e.target.value })));
+  }
+  function save() {
+    if (!d.title.trim()) { titleInp.focus(); return; }
+    const i = cfg.tasks.findIndex(y => y.id === d.id); if (i >= 0) cfg.tasks[i] = d; else cfg.tasks.push(d);
+    m.close(); afterTasks(); if (onDone) onDone();
+  }
+  build();
+  const m = modal(isNew ? t('newTask') : t('editTask'), body, [
+    !isNew ? h('button', { class: 'btn danger ghost', onclick: () => { cfg.tasks = cfg.tasks.filter(y => y.id !== d.id); m.close(); afterTasks(); if (onDone) onDone(); } }, icon('trash', 16), t('delete')) : null,
+    h('span', { class: 'sp' }), h('button', { class: 'btn', onclick: () => m.close() }, t('cancel')), h('button', { class: 'btn primary', onclick: save }, t('save'))], 'small');
+  if (isNew) setTimeout(() => titleInp.focus(), 80);
+}
+let remindBusy = false;
+async function scheduleReminders() {
+  const LN = NP.LocalNotifications; if (!LN || !cfg || remindBusy) return; remindBusy = true;
+  try {
+    try { const pend = await LN.getPending(); if (pend.notifications && pend.notifications.length) await LN.cancel({ notifications: pend.notifications.map(n => ({ id: n.id })) }); } catch {}
+    const mins = +cfg.remind || 0, now = Date.now(), list = []; let id = 1; const slots = sortedSlots();
+    if (mins > 0) for (let k = 0; k < 8 && list.length < 50; k++) {
+      const iso = addDays(todayISO(), k), dow = dowOf(iso), lt = weekLetter(mondayOf(iso));
+      if (!shownDays().includes(dow) || offInfo(iso)) continue;
+      for (const l of cfg.lessons.filter(l => l.dow === dow && (!lt || !l.wk || l.wk === 'all' || l.wk === lt))) {
+        const s0 = slots.find(x => x.id === l.from), s1 = slots.find(x => x.id === l.to) || s0; if (!s0) continue;
+        const at = parse(iso); at.setHours(0, toMin(s0.start) - mins, 0, 0); if (at.getTime() <= now) continue;
+        const sub = cfg.subjects.find(x => x.id === l.subjectId);
+        list.push({ id: id++, title: sub ? sub.name : t('type_lesson'), body: [fmtTime(s0.start) + '–' + fmtTime(s1.end), l.cls, l.room].filter(Boolean).join(' · '), schedule: { at, allowWhileIdle: true } });
+      }
+    }
+    for (const x of cfg.tasks || []) if (!x.done && x.kind === 'exam' && x.due && list.length < 60) {
+      const at = parse(addDays(x.due, -1)); at.setHours(18, 0, 0, 0); if (at.getTime() <= now) continue;
+      const sub = cfg.subjects.find(y => y.id === x.subjectId);
+      list.push({ id: id++, title: t('notifExamTitle'), body: [sub ? sub.name : null, x.title].filter(Boolean).join(' · '), schedule: { at, allowWhileIdle: true } });
+    }
+    if (!list.length) return;
+    let perm = await LN.checkPermissions(); if (perm.display !== 'granted') perm = await LN.requestPermissions();
+    if (perm.display !== 'granted') { if (+cfg.remind) toast(t('notifDenied'), 4000); return; }
+    await LN.schedule({ notifications: list });
+  } catch {} finally { remindBusy = false; }
+}
+function moreMenu(anchor) {
+  const item = (ic, title, hint, fn) => h('button', { class: 'mi', onclick: () => { closePop(); fn(); } }, icon(ic, 16), h('span', null, h('b', null, title), hint ? h('small', null, hint) : null));
+  popover(anchor, h('div', { class: 'menu' },
+    item('palette', t('theme'), null, () => themeMenu(anchor)),
+    item('printer', t('exportPdf'), t('exportPdfHint'), exportPdf),
+    item('calendar', t('exportIcs'), t('exportIcsHint'), exportIcs),
+    item('download', t('export'), null, exportData)));
+}
+const loadScript = src => new Promise((res, rej) => { if (document.querySelector(`script[data-src="${src}"]`)) return res(); const sc = document.createElement('script'); sc.src = src; sc.dataset.src = src; sc.onload = res; sc.onerror = rej; document.head.append(sc); });
+async function shareFile(name, data, mime, base64) {
+  if (isNative && NP.Filesystem && NP.Share) {
+    try { const r = await NP.Filesystem.writeFile({ path: name, data, directory: 'CACHE', ...(base64 ? {} : { encoding: 'utf8' }) }); await NP.Share.share({ title: name, url: r.uri, dialogTitle: name }); return true; }
+    catch (e) { if (!/cancel/i.test(String(e && e.message))) toast(t('exportFail')); return false; }
+  }
+  const a = h('a', { href: URL.createObjectURL(new Blob([data], { type: mime })), download: name }); document.body.append(a); a.click();
+  setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 1500); return true;
+}
+async function exportPdf() {
+  toast(t('loading'));
+  let wrap = null;
+  try {
+    await loadScript('vendor/html2canvas.min.js'); await loadScript('vendor/jspdf.umd.min.js');
+    if (notesTimer) await flushNotes();
+    const th = THEMES.snow.v; wrap = h('div');
+    for (const [k, v] of Object.entries(th)) wrap.style.setProperty('--' + k, v);
+    Object.assign(wrap.style, { position: 'fixed', left: '-14000px', top: '0', width: '1600px', padding: '28px', background: th.bg, color: th.text, fontFamily: getComputedStyle(document.body).fontFamily });
+    const days = shownDays(), a = addDays(ui.monday, days[0] - 1), b = addDays(ui.monday, days[days.length - 1] - 1), lt = weekLetter(ui.monday);
+    wrap.append(h('div', { style: { marginBottom: '16px' } }, h('div', { style: { fontSize: '26px', fontWeight: '800' } }, (cfg.name ? cfg.name + ' — ' : '') + t('title')),
+      h('div', { style: { fontSize: '16px', color: th.muted } }, t('wk') + ' ' + isoWeek(ui.monday) + (lt ? ' · ' + lt : '') + ' · ' + fmtRangeD(a, b))));
+    const keep = ui.anim; ui.anim = 'none'; const g = renderGrid(days); ui.anim = keep; g.style.overflow = 'visible'; wrap.append(g); document.body.append(wrap);
+    wrap.querySelectorAll('.add,.dhb').forEach(n => n.remove()); wrap.querySelectorAll('.time').forEach(n => { n.style.position = 'static'; }); wrap.querySelectorAll('[contenteditable]').forEach(n => n.removeAttribute('contenteditable'));
+    wrap.querySelectorAll('.grid').forEach(n => n.style.setProperty('--cm', '200px'));
+    await new Promise(r => setTimeout(r, 80));
+    const canvas = await window.html2canvas(wrap, { scale: 2, backgroundColor: th.bg, logging: false });
+    const { jsPDF } = window.jspdf; const pdf = new jsPDF({ orientation: 'landscape', unit: 'mm', format: 'a4' });
+    const W = 297, H = 210, mg = 8; let w = W - 2 * mg, hh = canvas.height * w / canvas.width; if (hh > H - 2 * mg) { hh = H - 2 * mg; w = canvas.width * hh / canvas.height; }
+    pdf.addImage(canvas.toDataURL('image/jpeg', 0.92), 'JPEG', (W - w) / 2, mg, w, hh);
+    const name = `planif-${ui.monday}.pdf`;
+    if (isNative) await shareFile(name, pdf.output('datauristring').split(',')[1], 'application/pdf', true); else pdf.save(name);
+  } catch (e) { toast(t('pdfFail')); } finally { if (wrap) wrap.remove(); }
+}
+function buildICS() {
+  const out = ['BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//Planif//Planif ' + VERSION + '//' + LANG.toUpperCase(), 'CALSCALE:GREGORIAN', 'METHOD:PUBLISH'];
+  const slots = sortedSlots(), stamp = new Date().toISOString().replace(/[-:]/g, '').slice(0, 15) + 'Z';
+  const esc = v => String(v).replace(/\\/g, '\\\\').replace(/;/g, '\\;').replace(/,/g, '\\,').replace(/\n/g, '\\n');
+  const dt = (iso, hm) => iso.replace(/-/g, '') + 'T' + hm.replace(':', '') + '00', dd = iso => iso.replace(/-/g, '');
+  for (const m of weekList()) { const lt = weekLetter(m);
+    for (const l of cfg.lessons) {
+      if (!shownDays().includes(l.dow) || (lt && l.wk && l.wk !== 'all' && l.wk !== lt)) continue;
+      const iso = addDays(m, l.dow - 1); if (offInfo(iso) || iso < cfg.year.start || iso > cfg.year.end) continue;
+      const s0 = slots.find(x => x.id === l.from), s1 = slots.find(x => x.id === l.to) || s0; if (!s0) continue;
+      const sub = cfg.subjects.find(x => x.id === l.subjectId);
+      out.push('BEGIN:VEVENT', 'UID:' + l.id + '-' + iso + '@planif', 'DTSTAMP:' + stamp, 'DTSTART:' + dt(iso, s0.start), 'DTEND:' + dt(iso, s1.end), 'SUMMARY:' + esc((sub ? sub.name : '') + (l.cls ? ' · ' + l.cls : '')));
+      if (l.room) out.push('LOCATION:' + esc(l.room)); out.push('END:VEVENT');
+    } }
+  for (const x of cfg.tasks || []) if (x.due && !x.done) {
+    const sub = cfg.subjects.find(y => y.id === x.subjectId);
+    out.push('BEGIN:VEVENT', 'UID:task-' + x.id + '@planif', 'DTSTAMP:' + stamp, 'DTSTART;VALUE=DATE:' + dd(x.due), 'DTEND;VALUE=DATE:' + dd(addDays(x.due, 1)), 'SUMMARY:' + esc(t('kind_' + x.kind) + ' : ' + x.title + (sub ? ' (' + sub.name + ')' : '')), 'END:VEVENT');
+  }
+  out.push('END:VCALENDAR'); return out.join('\r\n');
+}
+async function exportIcs() { if (!weekList().length) { toast(t('notInYear')); return; } if (await shareFile('planif.ics', buildICS(), 'text/calendar') && !isNative) toast('✓ planif.ics'); }
+async function fetchSubs(country) {
+  const data = await fetchJSON(`https://openholidaysapi.org/Subdivisions?countryIsoCode=${country}&languageIsoCode=${LANG.toUpperCase()}`);
+  const out = []; const walk = (arr, depth) => { for (const x of arr || []) { if (x && x.code) out.push([x.code, (depth ? '— ' : '') + (pickName(x.name) || x.shortName || x.code)]); if (x && x.children) walk(x.children, depth + 1); } };
+  walk(Array.isArray(data) ? data : [], 0); return out;
+}
+async function loadOnline(country, sub, y) {
+  let start = null, end = null, vacations = [], holidays = [];
+  try { ({ start, end, vacations } = await loadSchool(country, sub, y)); } catch { vacations = []; }
+  try {
+    const ph = await fetchJSON(`https://openholidaysapi.org/PublicHolidays?countryIsoCode=${country}${sub ? '&subdivisionCode=' + sub : ''}&validFrom=${y}-06-01&validTo=${y + 1}-09-30&languageIsoCode=${LANG.toUpperCase()}`);
+    const lo = start || `${y}-08-01`, hi = end || `${y + 1}-07-31`, map = {};
+    for (const x of Array.isArray(ph) ? ph : []) {
+      if (x.nationwide === false) { const subs = (x.subdivisions || []).map(z => String(z.code || '')); if (!sub || (subs.length && !subs.some(c => c === sub || sub.startsWith(c + '-') || c.startsWith(sub + '-')))) continue; }
+      let d = String(x.startDate || '').slice(0, 10); const e = String(x.endDate || x.startDate || '').slice(0, 10); if (!/^\d{4}-\d\d-\d\d$/.test(d)) continue;
+      for (let g = 0; d <= e && g < 10; g++, d = addDays(d, 1)) if (d >= lo && d <= hi && dowOf(d) <= 6) { const nm = pickName(x.name); map[d] = map[d] && !map[d].includes(nm) ? map[d] + ' / ' + nm : nm; }
+    }
+    holidays = Object.keys(map).sort().map(date => ({ id: uid(), name: map[date], date }));
+  } catch {}
+  const note = vacations.length || holidays.length ? t('onlineNote') : t('ohFail');
+  return { start, end, vacations: vacations.map(v => ({ id: uid(), ...v })), holidays, note };
+}
+
 /* ================= Sauvegarde / import ================= */
 async function exportData() {
   if (notesTimer) await flushNotes();
@@ -1692,34 +1937,36 @@ async function writeAll(res) {
 async function resetAll() { clearTimeout(notesTimer); notesTimer = null; notesMonday = null; for (const m of await wList()) await wRemove(m); for (const k of await store.keys()) if (k.startsWith('pl2.')) await store.remove(k); cfg = null; startOnboarding(); }
 
 /* ================= Premier lancement ================= */
-function detectLang() { const l = (navigator.language || 'fr').toLowerCase(); return l.startsWith('de') ? 'de' : l.startsWith('fr') ? 'fr' : 'en'; }
+function detectLang() { const l = (navigator.language || 'fr').toLowerCase().slice(0, 2); return I18N[l] ? l : 'en'; }
 function startOnboarding() {
-  const o = { lang: detectLang(), name: '', theme: 'midnight', gen: defaultGen(), year: defaultYear(), days: [1, 2, 3, 4, 5] };
-  LANG = o.lang; applyTheme(o.theme); let step = 0;
+  const o = { lang: detectLang(), profile: 'teacher', name: '', theme: 'midnight', gen: defaultGen(), year: defaultYear(), days: [1, 2, 3, 4, 5] };
+  LANG = o.lang; applyTheme(o.theme); let step = 0, lastStep = -1;
   app.innerHTML = ''; const wrap = h('div', { class: 'onb' }); app.append(wrap);
   function draw() {
-    LANG = o.lang; document.documentElement.lang = LANG; wrap.innerHTML = ''; let body;
-    if (step === 0) body = [h('div', { class: 'logo big' }, icon('calendar', 32)), h('h1', null, t('welcome')), h('p', { class: 'lead' }, t('welcomeSub')),
+    LANG = o.lang; PROF = o.profile; document.documentElement.lang = LANG; wrap.innerHTML = ''; let body; const S = step === 0 ? 0 : step === 1 ? 'p' : step - 1;
+    if (step === 1) body = [h('h1', null, t('stepProfile')), profCards(o.profile, id => { o.profile = id; o.gen = genFor(id); draw(); })];
+    if (S === 0) body = [h('div', { class: 'logo big' }, icon('calendar', 32)), h('h1', null, t('welcome')), h('p', { class: 'lead' }, t('welcomeSub')),
       h('h3', { class: 'sh' }, t('chooseLang')), langCards(o.lang, id => { o.lang = id; draw(); }),
       h('button', { class: 'link', onclick: () => importData() }, icon('upload', 15), t('haveBackup'))];
-    if (step === 1) body = [h('h1', null, t('stepLook')), field(t('yourName'), h('input', { class: 'inp', value: o.name, oninput: e => o.name = e.target.value })),
+    if (S === 1) body = [h('h1', null, t('stepLook')), field(t('yourName'), h('input', { class: 'inp', value: o.name, oninput: e => o.name = e.target.value })),
       h('h3', { class: 'sh' }, t('theme')), themeGrid(o.theme, id => { o.theme = id; applyTheme(id); draw(); })];
-    if (step === 2) { const prev = h('div', { class: 'genprev' }, genPreview(o.gen));
+    if (S === 2) { const prev = h('div', { class: 'genprev' }, genPreview(o.gen));
       body = [h('h1', null, t('stepDay')), h('p', { class: 'lead' }, t('genHint')), genForm(o.gen, () => { prev.innerHTML = ''; prev.append(...genPreview(o.gen)); }), prev]; }
-    if (step === 3) body = [h('h1', null, t('stepYear')), h('div', { class: 'calbox' }, h('p', null, t('calIntro')),
+    if (S === 3) body = [h('h1', null, t('stepYear')), h('div', { class: 'calbox' }, h('p', null, t('calIntro')),
         h('button', { class: 'btn primary', onclick: () => calendarDialog(o.year, ny => { o.year = ny; draw(); }) }, icon('calendar', 16), t('calRegionBtn')),
         (o.year.vacations.length || o.year.holidays.length) ? h('p', { class: 'summary' }, '✓ ' + calSummary(o.year)) : null),
       h('div', { class: 'grid2' },
         field(t('yearStart'), h('input', { class: 'inp', type: 'date', value: o.year.start, onchange: e => o.year.start = e.target.value })),
         field(t('yearEnd'), h('input', { class: 'inp', type: 'date', value: o.year.end, onchange: e => o.year.end = e.target.value }))),
       h('h3', { class: 'sh' }, t('daysShown')), dayChips(o.days, draw), h('p', { class: 'hint' }, t('yearHint'))];
-    wrap.append(h('div', { class: 'ocard' },
-      h('div', { class: 'dots' }, [0, 1, 2, 3].map(i => h('i', { class: i === step ? 'on' : i < step ? 'done' : '' }))), body,
+    const animate = step !== lastStep; lastStep = step;
+    wrap.append(h('div', { class: 'ocard' + (animate ? ' anim' : '') },
+      h('div', { class: 'dots' }, [0, 1, 2, 3, 4].map(i => h('i', { class: i === step ? 'on' : i < step ? 'done' : '' }))), body,
       h('div', { class: 'onav' }, step > 0 ? h('button', { class: 'btn', onclick: () => { step--; draw(); } }, t('back')) : h('span'),
-        h('button', { class: 'btn primary', onclick: () => { if (step < 3) { step++; draw(); } else finish(); } }, step < 3 ? t('next') : t('finish'), icon('chevR', 16)))));
+        h('button', { class: 'btn primary', onclick: () => { if (step < 4) { step++; draw(); } else finish(); } }, step < 4 ? t('next') : t('finish'), icon('chevR', 16)))));
   }
   async function finish() {
-    cfg = defaultConfig(o.lang); Object.assign(cfg, { name: o.name.trim(), theme: o.theme, gen: o.gen, year: o.year, days: o.days.slice() }); cfg.slots = genSlots(o.gen);
+    cfg = defaultConfig(o.lang, o.profile); Object.assign(cfg, { name: o.name.trim(), theme: o.theme, gen: o.gen, year: o.year, days: o.days.slice() }); cfg.slots = genSlots(o.gen);
     await store.set(KEY_CFG, JSON.stringify(cfg)); await boot2(); toast(t('welcomeTip'), 4500);
   }
   draw();
@@ -1731,7 +1978,7 @@ async function boot2() {
   ui.monday = initialMonday(); const td = todayISO();
   ui.day = (mondayOf(td) === ui.monday && shownDays().includes(dowOf(td))) ? dowOf(td) : shownDays()[0];
   ui.anim = 'f'; await loadNotes(); renderApp();
-  setTimeout(async () => { await autoSnapshot(); await checkBackupReminder(); }, 800);
+  setTimeout(async () => { await autoSnapshot(); await checkBackupReminder(); await scheduleReminders(); }, 800);
 }
 async function boot() {
   try { await migrateWeeks(); } catch {}
@@ -1740,7 +1987,7 @@ async function boot() {
   try { cfg = fixCfg(JSON.parse(raw)); } catch { startOnboarding(); return; }
   await boot2();
 }
-document.addEventListener('visibilitychange', () => { if (document.hidden) { if (notesTimer) flushNotes(); if (cfgTimer) { clearTimeout(cfgTimer); cfgTimer = null; store.set(KEY_CFG, JSON.stringify(cfg)); } } else markNow(); });
+document.addEventListener('visibilitychange', () => { if (document.hidden) { if (notesTimer) flushNotes(); if (cfgTimer) { clearTimeout(cfgTimer); cfgTimer = null; store.set(KEY_CFG, JSON.stringify(cfg)); } } else { markNow(); if (cfg) { updateHeader(); scheduleReminders(); } } });
 window.addEventListener('pagehide', () => { if (notesTimer) flushNotes(); });
 if (mq.addEventListener) mq.addEventListener('change', () => { if (cfg && !storedView()) { ui.view = mq.matches ? 'day' : 'week'; renderBody(); } });
 boot();
