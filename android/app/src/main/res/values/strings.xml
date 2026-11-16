@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Planif</string>
+    <string name="title_activity_main">Planif</string>
+    <string name="package_name">ch.planif.hebdo</string>
+    <string name="custom_url_scheme">ch.planif.hebdo</string>
+</resources>

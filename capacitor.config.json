@@ -1,0 +1,17 @@
+{
+  "appId": "ch.planif.hebdo",
+  "appName": "Planif",
+  "webDir": "www",
+  "backgroundColor": "#1B1B22",
+  "android": {
+    "allowMixedContent": false
+  },
+  "ios": {
+    "contentInset": "never"
+  },
+  "plugins": {
+    "CapacitorHttp": {
+      "enabled": true
+    }
+  }
+}
