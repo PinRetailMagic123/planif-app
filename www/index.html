@@ -320,7 +320,7 @@ details.gen .inp{background:var(--surface)}
 <div id="app"></div>
 <script>
 'use strict';
-const VERSION = '2.1.0';
+const VERSION = '2.1.1';
 
 /* ================= Stockage (natif ou navigateur) ================= */
 const isNative = !!(window.Capacitor && window.Capacitor.isNativePlatform && window.Capacitor.isNativePlatform());
@@ -378,6 +378,7 @@ const I18N = {
     caNote: 'Au Canada, les vacances dépendent du centre de services ou du conseil scolaire : importez son fichier .ics ou ajoutez-les à la main. Les jours fériés de la province sont calculés automatiquement.',
     checkNote: 'Vérifiez toujours ces dates avec le calendrier officiel de votre établissement.', nothingFound: 'Aucune date trouvée dans ce fichier.',
     calSummary: '{v} périodes de vacances · {h} jours fériés', calRegionBtn: 'Charger le calendrier de ma région',
+    apply: 'Appliquer', dayTitle: 'Journée', dayStart: 'Début de la journée', dayEnd: 'Fin de la journée', dayHint: 'Changer le début décale toutes les périodes et pauses ; changer la fin modifie la dernière ligne. Touchez « Appliquer ». Chaque ligne reste modifiable ci-dessous.',
     search: 'Rechercher', searchPh: 'Rechercher dans toutes les notes…', noResults: 'Aucun résultat.',
     checklist: 'Liste de tâches', template: 'Insérer un modèle', tab_templates: 'Modèles', templatesHint: 'Le texte avant « : » est mis en gras. Insérez un modèle avec le bouton de la barre d’outils.', newTemplate: 'Nouveau modèle', manage: 'Gérer les modèles',
     tplNames: ['Plan de leçon', 'Évaluation'], tplBodies: ['Objectifs :\nMatériel :\nDéroulement :\nDevoirs :', 'Thème :\nCritères :\nBarème :\nRemarques :'],
@@ -435,6 +436,7 @@ const I18N = {
     caNote: 'In Kanada hängen die Ferien vom Schulbezirk ab: Importieren Sie dessen .ics-Datei oder tragen Sie sie von Hand ein. Die Feiertage der Provinz werden automatisch berechnet.',
     checkNote: 'Prüfen Sie diese Daten immer mit dem offiziellen Kalender Ihrer Schule.', nothingFound: 'Keine Daten in dieser Datei gefunden.',
     calSummary: '{v} Ferienperioden · {h} Feiertage', calRegionBtn: 'Kalender meiner Region laden',
+    apply: 'Übernehmen', dayTitle: 'Schultag', dayStart: 'Tagesbeginn', dayEnd: 'Tagesende', dayHint: 'Ein neuer Beginn verschiebt alle Lektionen und Pausen; ein neues Ende ändert die letzte Zeile. Tippen Sie auf „Übernehmen“. Jede Zeile bleibt unten einzeln änderbar.',
     search: 'Suchen', searchPh: 'In allen Notizen suchen…', noResults: 'Keine Ergebnisse.',
     checklist: 'Checkliste', template: 'Vorlage einfügen', tab_templates: 'Vorlagen', templatesHint: 'Text vor „:“ wird fett. Fügen Sie eine Vorlage über die Werkzeugleiste ein.', newTemplate: 'Neue Vorlage', manage: 'Vorlagen verwalten',
     tplNames: ['Lektionsplan', 'Prüfung'], tplBodies: ['Ziele:\nMaterial:\nAblauf:\nHausaufgaben:', 'Thema:\nKriterien:\nBewertung:\nBemerkungen:'],
@@ -492,6 +494,7 @@ const I18N = {
     caNote: 'In Canada, school breaks depend on your school board: import its .ics file or add them by hand. Provincial public holidays are calculated automatically.',
     checkNote: 'Always check these dates against your school’s official calendar.', nothingFound: 'No dates found in this file.',
     calSummary: '{v} holiday periods · {h} public holidays', calRegionBtn: 'Load my region’s calendar',
+    apply: 'Apply', dayTitle: 'School day', dayStart: 'Start of day', dayEnd: 'End of day', dayHint: 'Changing the start shifts every period and break; changing the end adjusts the last row. Tap “Apply”. Each row stays editable below.',
     search: 'Search', searchPh: 'Search all notes…', noResults: 'No results.',
     checklist: 'Checklist', template: 'Insert template', tab_templates: 'Templates', templatesHint: 'Text before “:” becomes bold. Insert a template from the toolbar.', newTemplate: 'New template', manage: 'Manage templates',
     tplNames: ['Lesson plan', 'Assessment'], tplBodies: ['Objectives:\nMaterials:\nProcedure:\nHomework:', 'Topic:\nCriteria:\nMarking:\nNotes:'],
@@ -653,7 +656,7 @@ let cfg = null;
 function defaultGen() { return { start: '08:00', dur: 45, count: 8, gap: 5, breakDur: 15, breakAfter: [2, 6], lunchAfter: 4, lunchDur: 60 }; }
 function defaultYear() { const n = new Date(); const y = n.getMonth() >= 6 ? n.getFullYear() : n.getFullYear() - 1; return { start: `${y}-09-01`, end: `${y + 1}-06-30`, vacations: [], holidays: [] }; }
 function genSlots(o) {
-  const slots = []; let m = toMin(o.start); const cnt = Math.max(1, Math.min(16, +o.count || 1)); const dur = Math.max(5, +o.dur || 45);
+  const slots = []; let m = toMin(o.start); const cnt = Math.max(1, Math.min(20, +o.count || 1)); const dur = Math.max(5, +o.dur || 45);
   for (let i = 1; i <= cnt; i++) {
     slots.push({ id: uid(), type: 'lesson', label: '', start: fromMin(m), end: fromMin(m + dur) }); m += dur;
     if (i === cnt) break;
@@ -1095,7 +1098,7 @@ function genForm(o, onChange) {
   const f = (k, label, type, extra) => field(label, h('input', { class: 'inp', type, value: String(o[k]), ...(extra || {}), oninput: e => { o[k] = type === 'number' ? +e.target.value : e.target.value; onChange && onChange(); } }));
   return h('div', { class: 'gform' },
     f('start', t('firstStart'), 'time'), f('dur', t('lessonDur'), 'number', { min: 5, max: 240 }),
-    f('count', t('lessonCount'), 'number', { min: 1, max: 16 }), f('gap', t('gapDur'), 'number', { min: 0, max: 60 }),
+    f('count', t('lessonCount'), 'number', { min: 1, max: 20 }), f('gap', t('gapDur'), 'number', { min: 0, max: 60 }),
     f('breakDur', t('breakDur'), 'number', { min: 0, max: 90 }),
     field(t('breakAfter'), h('input', { class: 'inp', inputmode: 'numeric', value: (o.breakAfter || []).join(', '), placeholder: '2, 6', oninput: e => { o.breakAfter = e.target.value.split(/[^0-9]+/).filter(Boolean).map(Number); onChange && onChange(); } })),
     f('lunchAfter', t('lunchAfter'), 'number', { min: 0, max: 16 }), f('lunchDur', t('lunchDur'), 'number', { min: 0, max: 180 }));
@@ -1147,6 +1150,7 @@ function openSettings(tab) {
   const draft = clone(cfg); const prevLang = LANG; let saved = false; let cur = tab || 'general'; let ttDay = shownDays()[0];
   const m = modal('', h('div'), null, 'large');
   m.onclose = () => { if (!saved) { LANG = prevLang; applyTheme(cfg.theme); } };
+  let rsT = null; const refreshSoon = () => { clearTimeout(rsT); rsT = setTimeout(() => { if (!m.card.contains(document.activeElement) || !document.activeElement.matches('input[type=time]')) refresh(); }, 120); };
   const refresh = () => { const sp = m.card.querySelector('.spanel'); const st = sp ? sp.scrollTop : 0; rebuild(); const n = m.card.querySelector('.spanel'); if (n) n.scrollTop = st; };
   const P = {
     general: () => h('div', null,
@@ -1179,8 +1183,8 @@ function openSettings(tab) {
           h('span', { class: 'sic' }, icon(TYPEICON[s.type], 16)),
           select(TYPES.map(x => [x, t('type_' + x)]), s.type, v => { s.type = v; refresh(); }, 'stype'),
           h('input', { class: 'inp lbl', placeholder: s.type === 'lesson' ? t('type_lesson') + ' ' + nums[s.id] : t('type_' + s.type), value: s.label || '', oninput: e => s.label = e.target.value }),
-          h('input', { class: 'inp st', type: 'time', 'aria-label': t('start'), value: s.start, onchange: e => { if (e.target.value) s.start = e.target.value; refresh(); } }),
-          h('input', { class: 'inp en', type: 'time', 'aria-label': t('end'), value: s.end, onchange: e => { if (e.target.value) s.end = e.target.value; refresh(); } }),
+          h('input', { class: 'inp st', type: 'time', 'aria-label': t('start'), value: s.start, oninput: e => { if (e.target.value) s.start = e.target.value; }, onblur: refreshSoon }),
+          h('input', { class: 'inp en', type: 'time', 'aria-label': t('end'), value: s.end, oninput: e => { if (e.target.value) s.end = e.target.value; }, onblur: refreshSoon }),
           h('span', { class: 'dur' }, (toMin(s.end) - toMin(s.start)) + ' min'),
           delBtn(async () => {
             const used = draft.lessons.filter(l => l.from === s.id || l.to === s.id);
@@ -1192,7 +1196,23 @@ function openSettings(tab) {
         const last = draft.slots.slice().sort(bySt).pop(); const st = last ? toMin(last.end) : 480; const len = { lesson: 45, break: 15, lunch: 60, admin: 45, other: 30 }[ty];
         draft.slots.push({ id: uid(), type: ty, label: '', start: fromMin(st), end: fromMin(Math.min(st + len, 1439)) }); refresh();
       } }, icon('plus', 14), t('type_' + ty))));
-      return h('div', null, gen, h('h3', { class: 'sh' }, t('tab_slots')), list, adds);
+      let dayBox = null;
+      if (slots.length) {
+        const first = slots[0], last = slots.reduce((a, b) => toMin(b.end) > toMin(a.end) ? b : a);
+        const ds = { v: first.start }, de = { v: last.end };
+        const apply = () => {
+          const d = ds.v ? toMin(ds.v) - toMin(first.start) : 0;
+          if (d && !slots.some(x => toMin(x.start) + d < 0 || toMin(x.end) + d > 1439)) draft.slots.forEach(x => { x.start = fromMin(toMin(x.start) + d); x.end = fromMin(toMin(x.end) + d); });
+          const endWanted = de.v && de.v !== last.end ? de.v : null;
+          if (endWanted && toMin(endWanted) > toMin(last.start)) last.end = endWanted;
+          refresh();
+        };
+        dayBox = h('div', { class: 'grid2', style: { alignItems: 'end' } },
+          field(t('dayStart'), h('input', { class: 'inp', type: 'time', value: first.start, oninput: e => ds.v = e.target.value })),
+          field(t('dayEnd'), h('input', { class: 'inp', type: 'time', value: last.end, oninput: e => de.v = e.target.value })),
+          h('div', { class: 'addrow', style: { marginTop: 0, marginBottom: '12px' } }, h('button', { class: 'btn primary', onclick: apply }, t('apply'))));
+      }
+      return h('div', null, gen, dayBox ? [h('h3', { class: 'sh' }, t('dayTitle')), dayBox, h('p', { class: 'hint' }, t('dayHint'))] : null, h('h3', { class: 'sh' }, t('tab_slots')), list, adds);
     },
     subjects: () => h('div', null,
       draft.subjects.map(s => { const n = draft.lessons.filter(l => l.subjectId === s.id).length;
