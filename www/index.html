@@ -81,9 +81,9 @@ button{font:inherit;color:inherit;cursor:pointer}
 .time.t-admin{box-shadow:inset 3px 0 0 var(--admin)}
 .ticon{color:var(--muted)}
 .time.t-admin .ticon{color:var(--admin)}
-.cell{position:relative;border-radius:14px;background:var(--cell);color:var(--cellText);border:1px solid var(--border);min-height:66px;display:flex;flex-direction:column;transition:box-shadow .2s,transform .2s,border-color .2s;overflow:hidden;min-width:0}
+.cell{position:relative;border-radius:14px;background:var(--cell);color:var(--cellText);border:1px solid var(--border);min-height:var(--cellmin,66px);display:flex;flex-direction:column;transition:box-shadow .2s,transform .2s,border-color .2s;overflow:hidden;min-width:0}
 .cell:focus-within{border-color:var(--accent);box-shadow:0 0 0 3px var(--glow)}
-.cell.t-break,.cell.t-lunch{min-height:34px;background-image:repeating-linear-gradient(135deg,transparent 0 7px,var(--stripe) 7px 14px)}
+.cell.t-break,.cell.t-lunch{min-height:var(--breakmin,34px);background-image:repeating-linear-gradient(135deg,transparent 0 7px,var(--stripe) 7px 14px)}
 .cell.t-admin{box-shadow:inset 3px 0 0 var(--admin)}
 .cell .tag{position:absolute;top:7px;left:11px;font-size:9.5px;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:var(--admin);pointer-events:none}
 .cell.t-admin .note,.cell.t-other .note{padding-top:22px}
@@ -353,7 +353,7 @@ details.gen .inp{background:var(--surface)}
 <div id="app"></div>
 <script>
 'use strict';
-const VERSION = '2.2.0';
+const VERSION = '2.3.0';
 
 /* ================= Stockage (natif ou navigateur) ================= */
 const isNative = !!(window.Capacitor && window.Capacitor.isNativePlatform && window.Capacitor.isNativePlatform());
@@ -552,6 +552,12 @@ const I18N = {
 let LANG = 'fr';
 const LOCALE = { fr: 'fr-CH', de: 'de-CH', en: 'en-GB', it: 'it-CH', es: 'es-ES', pt: 'pt-PT' };
 const LANGS = [['fr', 'FR', 'Français'], ['de', 'DE', 'Deutsch'], ['en', 'EN', 'English'], ['it', 'IT', 'Italiano'], ['es', 'ES', 'Español'], ['pt', 'PT', 'Português']];
+Object.assign(I18N.fr, {"genEnd": "Fin de la journée (facultatif)", "genEndHint": "Si une fin est indiquée, le nombre de périodes est calculé automatiquement (cours du soir compris).", "dayHint": "Changer le début décale toutes les lignes. Une fin plus tardive ajoute des périodes (cours du soir) ; une fin plus tôt retire les lignes en trop. Touchez « Appliquer ». Chaque ligne reste modifiable ci-dessous.", "endCutConfirm": "Des cours placés après {t} seront supprimés. Continuer ?", "display": "Affichage", "density": "Taille des cases", "dens_compact": "Compacte", "dens_normal": "Normale", "dens_large": "Grande", "hideEmpty": "Masquer les lignes vides", "hideEmptyHint": "Les périodes sans cours ni note de la semaine sont masquées (pratique pour les cours du soir).", "alsoOn": "Aussi le", "themeAuto": "Automatique", "copyWeek": "Copier les notes vers la semaine suivante", "copyWeekHint": "Ajoute les notes de cette semaine à celles de la suivante.", "weekCopied": "Notes copiées vers la semaine {n}.", "markOff": "Marquer comme congé", "markOffHint": "Pas de cours ce jour-là (sortie, grève, maladie…).", "unmarkOff": "Retirer le congé", "dayOffName": "Congé", "dayOffPrompt": "Nom du congé", "addTaskDay": "Ajouter une échéance ce jour"});
+Object.assign(I18N.de, {"genEnd": "Tagesende (optional)", "genEndHint": "Ist ein Ende angegeben, wird die Anzahl Lektionen automatisch berechnet (auch Abendkurse).", "dayHint": "Ein neuer Beginn verschiebt alle Zeilen. Ein späteres Ende fügt Lektionen hinzu (Abendkurse), ein früheres entfernt überzählige Zeilen. Tippen Sie auf „Übernehmen“. Jede Zeile bleibt unten änderbar.", "endCutConfirm": "Lektionen nach {t} werden gelöscht. Fortfahren?", "display": "Anzeige", "density": "Feldgröße", "dens_compact": "Kompakt", "dens_normal": "Normal", "dens_large": "Groß", "hideEmpty": "Leere Zeilen ausblenden", "hideEmptyHint": "Zeilen ohne Lektion und Notiz in dieser Woche werden ausgeblendet (praktisch für Abendkurse).", "alsoOn": "Auch am", "themeAuto": "Automatisch", "copyWeek": "Notizen in die nächste Woche kopieren", "copyWeekHint": "Fügt die Notizen dieser Woche zur nächsten hinzu.", "weekCopied": "Notizen in Woche {n} kopiert.", "markOff": "Als frei markieren", "markOffHint": "Kein Unterricht an diesem Tag (Ausflug, Krankheit…).", "unmarkOff": "Freien Tag entfernen", "dayOffName": "Frei", "dayOffPrompt": "Bezeichnung", "addTaskDay": "Termin an diesem Tag hinzufügen"});
+Object.assign(I18N.en, {"genEnd": "End of day (optional)", "genEndHint": "If an end is set, the number of periods is calculated automatically (evening classes included).", "dayHint": "Changing the start shifts every row. A later end adds periods (evening classes); an earlier end removes extra rows. Tap “Apply”. Each row stays editable below.", "endCutConfirm": "Lessons after {t} will be deleted. Continue?", "display": "Display", "density": "Cell size", "dens_compact": "Compact", "dens_normal": "Normal", "dens_large": "Large", "hideEmpty": "Hide empty rows", "hideEmptyHint": "Rows with no lesson or note this week are hidden (handy for evening classes).", "alsoOn": "Also on", "themeAuto": "Automatic", "copyWeek": "Copy notes to next week", "copyWeekHint": "Adds this week’s notes to next week’s.", "weekCopied": "Notes copied to week {n}.", "markOff": "Mark as day off", "markOffHint": "No lessons that day (trip, strike, sick day…).", "unmarkOff": "Remove day off", "dayOffName": "Day off", "dayOffPrompt": "Name of the day off", "addTaskDay": "Add a deadline on this day"});
+Object.assign(I18N.it, {"genEnd": "Fine della giornata (facoltativa)", "genEndHint": "Se indichi una fine, il numero di lezioni viene calcolato automaticamente (corsi serali compresi).", "dayHint": "Cambiare l’inizio sposta tutte le righe. Una fine più tardi aggiunge lezioni (corsi serali); una fine più presto toglie le righe in più. Tocca «Applica». Ogni riga resta modificabile qui sotto.", "endCutConfirm": "Le lezioni dopo le {t} verranno eliminate. Continuare?", "display": "Visualizzazione", "density": "Dimensione delle caselle", "dens_compact": "Compatta", "dens_normal": "Normale", "dens_large": "Grande", "hideEmpty": "Nascondi le righe vuote", "hideEmptyHint": "Le righe senza lezioni né note nella settimana vengono nascoste (utile per i corsi serali).", "alsoOn": "Anche il", "themeAuto": "Automatico", "copyWeek": "Copia le note nella settimana successiva", "copyWeekHint": "Aggiunge le note di questa settimana a quelle della successiva.", "weekCopied": "Note copiate nella settimana {n}.", "markOff": "Segna come giorno libero", "markOffHint": "Nessuna lezione quel giorno (gita, sciopero, malattia…).", "unmarkOff": "Togli il giorno libero", "dayOffName": "Giorno libero", "dayOffPrompt": "Nome del giorno libero", "addTaskDay": "Aggiungi una scadenza in questo giorno"});
+Object.assign(I18N.es, {"genEnd": "Fin de la jornada (opcional)", "genEndHint": "Si indicas un fin, el número de clases se calcula automáticamente (clases nocturnas incluidas).", "dayHint": "Cambiar el inicio desplaza todas las filas. Un fin más tarde añade clases (clases nocturnas); un fin más temprano quita las filas sobrantes. Toca «Aplicar». Cada fila sigue siendo editable abajo.", "endCutConfirm": "Las clases después de las {t} se eliminarán. ¿Continuar?", "display": "Visualización", "density": "Tamaño de las casillas", "dens_compact": "Compacto", "dens_normal": "Normal", "dens_large": "Grande", "hideEmpty": "Ocultar filas vacías", "hideEmptyHint": "Se ocultan las filas sin clases ni notas de la semana (útil para clases nocturnas).", "alsoOn": "También el", "themeAuto": "Automático", "copyWeek": "Copiar las notas a la semana siguiente", "copyWeekHint": "Añade las notas de esta semana a las de la siguiente.", "weekCopied": "Notas copiadas a la semana {n}.", "markOff": "Marcar como día libre", "markOffHint": "Sin clases ese día (excursión, huelga, enfermedad…).", "unmarkOff": "Quitar el día libre", "dayOffName": "Día libre", "dayOffPrompt": "Nombre del día libre", "addTaskDay": "Añadir un plazo este día"});
+Object.assign(I18N.pt, {"genEnd": "Fim do dia (opcional)", "genEndHint": "Se indicar um fim, o número de aulas é calculado automaticamente (aulas noturnas incluídas).", "dayHint": "Mudar o início desloca todas as linhas. Um fim mais tarde acrescenta aulas (aulas noturnas); um fim mais cedo remove as linhas a mais. Toque em «Aplicar». Cada linha continua editável abaixo.", "endCutConfirm": "As aulas depois das {t} serão eliminadas. Continuar?", "display": "Apresentação", "density": "Tamanho das células", "dens_compact": "Compacto", "dens_normal": "Normal", "dens_large": "Grande", "hideEmpty": "Ocultar linhas vazias", "hideEmptyHint": "As linhas sem aulas nem notas da semana ficam ocultas (útil para aulas noturnas).", "alsoOn": "Também à", "themeAuto": "Automático", "copyWeek": "Copiar as notas para a semana seguinte", "copyWeekHint": "Acrescenta as notas desta semana às da seguinte.", "weekCopied": "Notas copiadas para a semana {n}.", "markOff": "Marcar como dia de folga", "markOffHint": "Sem aulas nesse dia (visita de estudo, greve, doença…).", "unmarkOff": "Remover o dia de folga", "dayOffName": "Folga", "dayOffPrompt": "Nome da folga", "addTaskDay": "Adicionar um prazo neste dia"});
 let PROF = 'teacher';
 const PO = {"student": {"fr": {"title": "Mon horaire", "welcomeSub": "Vos cours, devoirs et examens, semaine après semaine.", "subject": "Matière", "newSubject": "Nouvelle matière", "class": "Enseignant·e", "tab_subjects": "Matières", "pickSubject": "Choisissez une matière.", "tplNames": ["Devoirs", "Révision"], "tplBodies": ["À faire :\nPour le :\nMatériel :", "Chapitres :\nExercices :\nQuestions à poser :"]}, "de": {"title": "Mein Stundenplan", "welcomeSub": "Deine Lektionen, Hausaufgaben und Prüfungen, Woche für Woche.", "subject": "Fach", "newSubject": "Neues Fach", "class": "Lehrperson", "tab_subjects": "Fächer", "pickSubject": "Wähle ein Fach.", "tplNames": ["Hausaufgaben", "Lernen"], "tplBodies": ["Zu erledigen:\nBis:\nMaterial:", "Kapitel:\nÜbungen:\nFragen:"]}, "en": {"title": "My timetable", "welcomeSub": "Your classes, homework and exams, week after week.", "subject": "Subject", "newSubject": "New subject", "class": "Teacher", "tab_subjects": "Subjects", "pickSubject": "Choose a subject.", "tplNames": ["Homework", "Revision"], "tplBodies": ["To do:\nDue:\nMaterials:", "Chapters:\nExercises:\nQuestions to ask:"]}, "it": {"title": "Il mio orario", "welcomeSub": "Lezioni, compiti e verifiche, settimana dopo settimana.", "subject": "Materia", "newSubject": "Nuova materia", "class": "Docente", "tab_subjects": "Materie", "pickSubject": "Scegli una materia.", "tplNames": ["Compiti", "Ripasso"], "tplBodies": ["Da fare:\nPer il:\nMateriale:", "Capitoli:\nEsercizi:\nDomande da fare:"]}, "es": {"title": "Mi horario", "welcomeSub": "Tus clases, deberes y exámenes, semana tras semana.", "subject": "Asignatura", "newSubject": "Nueva asignatura", "class": "Profesor/a", "tab_subjects": "Asignaturas", "pickSubject": "Elige una asignatura.", "tplNames": ["Deberes", "Repaso"], "tplBodies": ["Por hacer:\nPara el:\nMaterial:", "Temas:\nEjercicios:\nPreguntas:"]}, "pt": {"title": "O meu horário", "welcomeSub": "As tuas aulas, trabalhos e testes, semana após semana.", "subject": "Disciplina", "newSubject": "Nova disciplina", "class": "Professor(a)", "tab_subjects": "Disciplinas", "pickSubject": "Escolhe uma disciplina.", "tplNames": ["Trabalho de casa", "Estudo"], "tplBodies": ["A fazer:\nPara:\nMaterial:", "Capítulos:\nExercícios:\nDúvidas:"]}}, "coach": {"fr": {"title": "Planification des séances", "welcomeSub": "Vos séances et groupes, semaine après semaine.", "subject": "Activité", "newSubject": "Nouvelle activité", "class": "Groupe", "room": "Lieu", "tab_subjects": "Activités", "addLesson": "Ajouter une séance", "editLesson": "Modifier la séance", "addHere": "Ajouter une séance ici", "pickSubject": "Choisissez une activité.", "type_lesson": "Séance", "tab_year": "Saison", "stepYear": "Votre saison", "tplNames": ["Séance", "Suivi"], "tplBodies": ["Objectif :\nÉchauffement :\nPartie principale :\nRetour au calme :\nMatériel :", "Présents :\nPoints forts :\nÀ travailler :"], "subjects": ["Entraînement", "Cours collectif", "Cours privé", "Atelier", "Préparation", "Réunion"]}, "de": {"title": "Trainingsplanung", "welcomeSub": "Ihre Trainings und Gruppen, Woche für Woche.", "subject": "Aktivität", "newSubject": "Neue Aktivität", "class": "Gruppe", "room": "Ort", "tab_subjects": "Aktivitäten", "addLesson": "Training hinzufügen", "editLesson": "Training bearbeiten", "addHere": "Hier Training hinzufügen", "pickSubject": "Wählen Sie eine Aktivität.", "type_lesson": "Einheit", "tab_year": "Saison", "stepYear": "Ihre Saison", "tplNames": ["Training", "Auswertung"], "tplBodies": ["Ziel:\nAufwärmen:\nHauptteil:\nAusklang:\nMaterial:", "Anwesend:\nStärken:\nZu üben:"], "subjects": ["Training", "Gruppenkurs", "Einzelunterricht", "Workshop", "Vorbereitung", "Sitzung"]}, "en": {"title": "Session planner", "welcomeSub": "Your sessions and groups, week after week.", "subject": "Activity", "newSubject": "New activity", "class": "Group", "room": "Venue", "tab_subjects": "Activities", "addLesson": "Add a session", "editLesson": "Edit session", "addHere": "Add a session here", "pickSubject": "Choose an activity.", "type_lesson": "Session", "tab_year": "Season", "stepYear": "Your season", "tplNames": ["Session", "Review"], "tplBodies": ["Goal:\nWarm-up:\nMain part:\nCool-down:\nEquipment:", "Attendance:\nStrengths:\nTo work on:"], "subjects": ["Training", "Group class", "Private lesson", "Workshop", "Preparation", "Meeting"]}, "it": {"title": "Pianificazione delle sessioni", "welcomeSub": "Le tue sessioni e i tuoi gruppi, settimana dopo settimana.", "subject": "Attività", "newSubject": "Nuova attività", "class": "Gruppo", "room": "Luogo", "tab_subjects": "Attività", "addLesson": "Aggiungi una sessione", "editLesson": "Modifica la sessione", "addHere": "Aggiungi una sessione qui", "pickSubject": "Scegli un’attività.", "type_lesson": "Sessione", "tab_year": "Stagione", "stepYear": "La tua stagione", "tplNames": ["Sessione", "Valutazione"], "tplBodies": ["Obiettivo:\nRiscaldamento:\nParte principale:\nDefaticamento:\nMateriale:", "Presenti:\nPunti di forza:\nDa migliorare:"], "subjects": ["Allenamento", "Corso di gruppo", "Lezione privata", "Laboratorio", "Preparazione", "Riunione"]}, "es": {"title": "Planificación de sesiones", "welcomeSub": "Tus sesiones y grupos, semana tras semana.", "subject": "Actividad", "newSubject": "Nueva actividad", "class": "Grupo", "room": "Lugar", "tab_subjects": "Actividades", "addLesson": "Añadir una sesión", "editLesson": "Editar la sesión", "addHere": "Añadir una sesión aquí", "pickSubject": "Elige una actividad.", "type_lesson": "Sesión", "tab_year": "Temporada", "stepYear": "Tu temporada", "tplNames": ["Sesión", "Seguimiento"], "tplBodies": ["Objetivo:\nCalentamiento:\nParte principal:\nVuelta a la calma:\nMaterial:", "Asistentes:\nPuntos fuertes:\nA mejorar:"], "subjects": ["Entrenamiento", "Clase grupal", "Clase particular", "Taller", "Preparación", "Reunión"]}, "pt": {"title": "Planeamento de sessões", "welcomeSub": "As suas sessões e grupos, semana após semana.", "subject": "Atividade", "newSubject": "Nova atividade", "class": "Grupo", "room": "Local", "tab_subjects": "Atividades", "addLesson": "Adicionar uma sessão", "editLesson": "Editar a sessão", "addHere": "Adicionar uma sessão aqui", "pickSubject": "Escolha uma atividade.", "type_lesson": "Sessão", "tab_year": "Temporada", "stepYear": "A sua temporada", "tplNames": ["Sessão", "Acompanhamento"], "tplBodies": ["Objetivo:\nAquecimento:\nParte principal:\nRetorno à calma:\nMaterial:", "Presentes:\nPontos fortes:\nA melhorar:"], "subjects": ["Treino", "Aula de grupo", "Aula particular", "Workshop", "Preparação", "Reunião"]}}, "personal": {"fr": {"title": "Mon agenda de la semaine", "welcomeSub": "Votre semaine type, organisée simplement.", "subject": "Catégorie", "newSubject": "Nouvelle catégorie", "class": "Avec", "room": "Lieu", "tab_subjects": "Catégories", "addLesson": "Ajouter une activité", "editLesson": "Modifier l’activité", "addHere": "Ajouter une activité ici", "pickSubject": "Choisissez une catégorie.", "type_lesson": "Créneau", "tab_year": "Calendrier", "stepYear": "Votre calendrier", "tplNames": ["Réunion", "Journée"], "tplBodies": ["Ordre du jour :\nDécisions :\nÀ faire :", "Priorités :\nRendez-vous :\nNotes :"], "subjects": ["Travail", "Réunion", "Sport", "Famille", "Loisirs", "Rendez-vous"]}, "de": {"title": "Meine Woche", "welcomeSub": "Ihr Wochenablauf, einfach organisiert.", "subject": "Kategorie", "newSubject": "Neue Kategorie", "class": "Mit", "room": "Ort", "tab_subjects": "Kategorien", "addLesson": "Aktivität hinzufügen", "editLesson": "Aktivität bearbeiten", "addHere": "Hier Aktivität hinzufügen", "pickSubject": "Wählen Sie eine Kategorie.", "type_lesson": "Zeitfenster", "tab_year": "Kalender", "stepYear": "Ihr Kalender", "tplNames": ["Besprechung", "Tag"], "tplBodies": ["Traktanden:\nEntscheide:\nZu erledigen:", "Prioritäten:\nTermine:\nNotizen:"], "subjects": ["Arbeit", "Besprechung", "Sport", "Familie", "Freizeit", "Termin"]}, "en": {"title": "My weekly planner", "welcomeSub": "Your typical week, simply organised.", "subject": "Category", "newSubject": "New category", "class": "With", "room": "Place", "tab_subjects": "Categories", "addLesson": "Add an activity", "editLesson": "Edit activity", "addHere": "Add an activity here", "pickSubject": "Choose a category.", "type_lesson": "Slot", "tab_year": "Calendar", "stepYear": "Your calendar", "tplNames": ["Meeting", "Day"], "tplBodies": ["Agenda:\nDecisions:\nTo do:", "Priorities:\nAppointments:\nNotes:"], "subjects": ["Work", "Meeting", "Sport", "Family", "Leisure", "Appointment"]}, "it": {"title": "La mia settimana", "welcomeSub": "La tua settimana tipo, organizzata in modo semplice.", "subject": "Categoria", "newSubject": "Nuova categoria", "class": "Con", "room": "Luogo", "tab_subjects": "Categorie", "addLesson": "Aggiungi un’attività", "editLesson": "Modifica l’attività", "addHere": "Aggiungi un’attività qui", "pickSubject": "Scegli una categoria.", "type_lesson": "Fascia", "tab_year": "Calendario", "stepYear": "Il tuo calendario", "tplNames": ["Riunione", "Giornata"], "tplBodies": ["Ordine del giorno:\nDecisioni:\nDa fare:", "Priorità:\nAppuntamenti:\nNote:"], "subjects": ["Lavoro", "Riunione", "Sport", "Famiglia", "Tempo libero", "Appuntamento"]}, "es": {"title": "Mi semana", "welcomeSub": "Tu semana tipo, organizada de forma sencilla.", "subject": "Categoría", "newSubject": "Nueva categoría", "class": "Con", "room": "Lugar", "tab_subjects": "Categorías", "addLesson": "Añadir una actividad", "editLesson": "Editar la actividad", "addHere": "Añadir una actividad aquí", "pickSubject": "Elige una categoría.", "type_lesson": "Franja", "tab_year": "Calendario", "stepYear": "Tu calendario", "tplNames": ["Reunión", "Día"], "tplBodies": ["Orden del día:\nDecisiones:\nPor hacer:", "Prioridades:\nCitas:\nNotas:"], "subjects": ["Trabajo", "Reunión", "Deporte", "Familia", "Ocio", "Cita"]}, "pt": {"title": "A minha semana", "welcomeSub": "A sua semana tipo, organizada de forma simples.", "subject": "Categoria", "newSubject": "Nova categoria", "class": "Com", "room": "Local", "tab_subjects": "Categorias", "addLesson": "Adicionar uma atividade", "editLesson": "Editar a atividade", "addHere": "Adicionar uma atividade aqui", "pickSubject": "Escolha uma categoria.", "type_lesson": "Horário", "tab_year": "Calendário", "stepYear": "O seu calendário", "tplNames": ["Reunião", "Dia"], "tplBodies": ["Ordem de trabalhos:\nDecisões:\nA fazer:", "Prioridades:\nCompromissos:\nNotas:"], "subjects": ["Trabalho", "Reunião", "Desporto", "Família", "Lazer", "Compromisso"]}}};
 function tvFor(k, lang, prof) { const po = prof && prof !== 'teacher' && PO[prof] ? (PO[prof][lang] || PO[prof].en) : null; if (po && po[k] !== undefined) return po[k]; const d = I18N[lang] || I18N.en; return d[k] !== undefined ? d[k] : (I18N.en[k] !== undefined ? I18N.en[k] : k); }
@@ -708,14 +714,18 @@ let cfg = null;
 function defaultGen() { return { start: '08:00', dur: 45, count: 8, gap: 5, breakDur: 15, breakAfter: [2, 6], lunchAfter: 4, lunchDur: 60 }; }
 function defaultYear() { const n = new Date(); const y = n.getMonth() >= 6 ? n.getFullYear() : n.getFullYear() - 1; return { start: `${y}-09-01`, end: `${y + 1}-06-30`, vacations: [], holidays: [] }; }
 function genSlots(o) {
-  const slots = []; let m = toMin(o.start); const cnt = Math.max(1, Math.min(20, +o.count || 1)); const dur = Math.max(5, +o.dur || 45);
+  const slots = []; let m = toMin(o.start); const dur = Math.max(5, +o.dur || 45);
+  const endAt = /^\d\d:\d\d$/.test(o.endAt || '') && toMin(o.endAt) > m ? toMin(o.endAt) : null;
+  const cnt = endAt != null ? 40 : Math.max(1, Math.min(20, +o.count || 1));
   for (let i = 1; i <= cnt; i++) {
+    if ((endAt != null && m + dur > endAt) || m + dur > 1439) break;
     slots.push({ id: uid(), type: 'lesson', label: '', start: fromMin(m), end: fromMin(m + dur) }); m += dur;
     if (i === cnt) break;
     if (i === +o.lunchAfter && +o.lunchDur > 0) { slots.push({ id: uid(), type: 'lunch', label: '', start: fromMin(m), end: fromMin(m + +o.lunchDur) }); m += +o.lunchDur; }
     else if ((o.breakAfter || []).includes(i) && +o.breakDur > 0) { slots.push({ id: uid(), type: 'break', label: '', start: fromMin(m), end: fromMin(m + +o.breakDur) }); m += +o.breakDur; }
     else m += +o.gap || 0;
   }
+  while (slots.length && slots[slots.length - 1].type !== 'lesson') slots.pop();
   return slots;
 }
 function applyGen(old, nw) { const pools = {}; old.slice().sort(bySt).forEach(s => (pools[s.type] = pools[s.type] || []).push(s.id)); nw.forEach(s => { const p = pools[s.type]; if (p && p.length) s.id = p.shift(); }); return nw; }
@@ -737,20 +747,25 @@ function fixCfg(c) {
   for (const k of ['slots', 'subjects', 'lessons', 'days', 'recentColors', 'templates', 'tasks']) if (!Array.isArray(out[k])) out[k] = d[k];
   out.rotation = { ...d.rotation, ...(c.rotation || {}) };
   if (!out.days.length) out.days = [1, 2, 3, 4, 5];
-  if (!THEMES[out.theme]) out.theme = 'midnight';
+  if (!THEMES[out.theme] && out.theme !== 'auto') out.theme = 'midnight';
   if (!PO[out.profile] && out.profile !== 'teacher') out.profile = 'teacher';
   return out;
 }
 let cfgTimer = null;
 function saveCfg() { clearTimeout(cfgTimer); cfgTimer = setTimeout(() => { cfgTimer = null; store.set(KEY_CFG, JSON.stringify(cfg)); }, 150); }
+const darkMQ = window.matchMedia('(prefers-color-scheme: dark)');
+let themeAsked = 'midnight';
+if (darkMQ.addEventListener) darkMQ.addEventListener('change', () => { if (themeAsked === 'auto') applyTheme('auto'); });
 function applyTheme(id) {
+  themeAsked = id; if (id === 'auto') id = darkMQ.matches ? 'midnight' : 'snow';
   const th = THEMES[id] || THEMES.midnight; const r = document.documentElement;
   for (const [k, v] of Object.entries(th.v)) r.style.setProperty('--' + k, v);
   r.style.setProperty('--chrome', th.v.bg + 'E0');
   document.querySelector('meta[name=theme-color]').setAttribute('content', th.v.bg);
   if (NP.StatusBar) { try { NP.StatusBar.setStyle({ style: th.dark ? 'DARK' : 'LIGHT' }).catch(() => {}); NP.StatusBar.setBackgroundColor({ color: th.v.bg }).catch(() => {}); } catch {} }
 }
-function applyFont() { const r = document.documentElement; r.style.setProperty('--nf', fontStack(cfg.font.family)); r.style.setProperty('--ns', cfg.font.size + 'px'); }
+function applyFont() { const r = document.documentElement; r.style.setProperty('--nf', fontStack(cfg.font.family)); r.style.setProperty('--ns', cfg.font.size + 'px');
+  const dn = { compact: [44, 26], normal: [66, 34], large: [100, 40] }[cfg.density || 'normal'] || [66, 34]; r.style.setProperty('--cellmin', dn[0] + 'px'); r.style.setProperty('--breakmin', dn[1] + 'px'); }
 
 /* ================= Semaines & calendrier ================= */
 const ui = { monday: null, day: 1, view: 'week', anim: '', backupDays: null };
@@ -886,7 +901,14 @@ function modal(title, body, footer, cls) {
   document.body.append(bd); modals.push(m); requestAnimationFrame(() => bd.classList.add('in'));
   return m;
 }
-document.addEventListener('keydown', e => { if (e.key === 'Escape') { if (curPop) closePop(); else if (modals.length) modals[modals.length - 1].close(); } });
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') { if (curPop) closePop(); else if (modals.length) modals[modals.length - 1].close(); return; }
+  if (!cfg || !document.getElementById('main') || curPop || modals.length || e.ctrlKey || e.metaKey || e.altKey) return;
+  const a = document.activeElement; if (a && (a.isContentEditable || /^(INPUT|SELECT|TEXTAREA)$/.test(a.tagName))) return;
+  if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') { e.preventDefault(); const dir = e.key === 'ArrowRight' ? 1 : -1; if (ui.view === 'day') swipeDay(dir); else stepWeek(dir); }
+  else if (e.key === 't' || e.key === 'T') goToday();
+  else if (e.key === '/') { e.preventDefault(); openSearch(); }
+});
 function confirmDlg(msg, okLabel, danger) {
   return new Promise(res => {
     let done = false;
@@ -1016,7 +1038,10 @@ function renderToolbar() {
     B('redo', icon('redo'), t('redo')));
 }
 function themeGrid(cur, onPick) {
-  return h('div', { class: 'themes' }, Object.entries(THEMES).map(([id, th]) => h('button', { class: 'thc' + (id === cur ? ' on' : ''), onclick: () => onPick(id) },
+  const a = THEMES.midnight.v, b = THEMES.snow.v;
+  return h('div', { class: 'themes' }, h('button', { class: 'thc' + (cur === 'auto' ? ' on' : ''), onclick: () => onPick('auto') },
+    h('div', { class: 'thp', style: { background: `linear-gradient(135deg, ${b.bg} 50%, ${a.bg} 50%)`, border: '1px solid ' + b.border } }, h('i', { style: { background: b.surface } }), h('i', { style: { background: `linear-gradient(${a.accent},${b.accent})` } }), h('i', { style: { background: a.cell } })), t('themeAuto')),
+    Object.entries(THEMES).map(([id, th]) => h('button', { class: 'thc' + (id === cur ? ' on' : ''), onclick: () => onPick(id) },
     h('div', { class: 'thp', style: { background: th.v.bg, border: '1px solid ' + th.v.border } }, h('i', { style: { background: th.v.surface } }), h('i', { style: { background: `linear-gradient(${th.v.accent},${th.v.accent2})` } }), h('i', { style: { background: th.v.cell } })),
     th.name[LANG] || (THEME_X[id] && THEME_X[id][{ it: 0, es: 1, pt: 2 }[LANG]]) || th.name.en)));
 }
@@ -1087,27 +1112,35 @@ function noteEl(key, ph) {
   el.addEventListener('drop', e => { if (e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files.length) e.preventDefault(); });
   return el;
 }
+function visibleSlots(days) {
+  const all = sortedSlots(); if (!cfg.hideEmpty) return all;
+  const keep = new Set();
+  for (const d of days) { if (offInfo(addDays(ui.monday, d - 1))) continue; const occ = occupancy(d, all); all.forEach((s, i) => { if (occ[i] || notes[d + '|' + s.id]) keep.add(i); }); }
+  if (!keep.size) return all;
+  const idx = [...keep].sort((a, b) => a - b), lo = idx[0], hi = idx[idx.length - 1];
+  return all.filter((s, i) => keep.has(i) || (i > lo && i < hi && (s.type === 'break' || s.type === 'lunch')));
+}
 function renderGrid(days) {
-  const slots = sortedSlots(); const td = todayISO(); const single = days.length === 1;
+  const slots = visibleSlots(days), nums = lessonNums(sortedSlots()); const td = todayISO(); const single = days.length === 1;
   const grid = h('div', { class: 'grid anim-' + (ui.anim || 'f'), style: { gridTemplateColumns: single ? 'var(--tc) minmax(0,1fr)' : `var(--tc) repeat(${days.length}, minmax(var(--cm),1fr))` } });
   const R0 = single ? 1 : 2;
   if (!single) grid.append(h('div', { style: { gridRow: '1', gridColumn: '1' } }));
   if (!single) days.forEach((d, i) => {
     const iso = addDays(ui.monday, d - 1);
-    grid.append(h('div', { class: 'dayhead' + (iso === td ? ' today' : ''), style: { gridRow: '1', gridColumn: String(i + 2) } },
-      h('span', { class: 'dn' }, dayName(d, single ? 'long' : (innerWidth < 1100 ? 'short' : 'long'))), dueOn(iso).length ? h('button', { class: 'dhb', title: t('tasks'), onclick: openTasks }, dueOn(iso).length) : null, h('span', { class: 'dd' }, fmtDate(iso, { day: 'numeric', month: 'short' }))));
+    grid.append(h('div', { class: 'dayhead' + (iso === td ? ' today' : ''), role: 'button', tabindex: '0', style: { gridRow: '1', gridColumn: String(i + 2), cursor: 'pointer' }, onclick: e => dayMenu(e.currentTarget, iso) },
+      h('span', { class: 'dn' }, dayName(d, single ? 'long' : (innerWidth < 1100 ? 'short' : 'long'))), dueOn(iso).length ? h('button', { class: 'dhb', title: t('tasks'), onclick: e => { e.stopPropagation(); openTasks(); } }, dueOn(iso).length) : null, h('span', { class: 'dd' }, fmtDate(iso, { day: 'numeric', month: 'short' }))));
   });
   let n = 0;
   slots.forEach((s, ri) => {
     const isL = s.type === 'lesson'; if (isL) n++;
     grid.append(h('div', { class: 'time t-' + s.type, style: { gridRow: String(ri + R0), gridColumn: '1' } },
-      isL ? h('div', { class: 'num' }, n) : h('div', { class: 'ticon' }, icon(TYPEICON[s.type], 14)),
+      isL ? h('div', { class: 'num' }, nums[s.id]) : h('div', { class: 'ticon' }, icon(TYPEICON[s.type], 14)),
       (s.label && isL) || s.type === 'admin' || s.type === 'other' ? h('div', { class: 'tl', title: s.label || t('type_' + s.type) }, s.label || t('type_' + s.type)) : null,
       h('div', { class: 'tr' }, fmtTime(s.start)), h('div', { class: 'tr' }, fmtTime(s.end))));
   });
   days.forEach((d, ci) => {
     const col = String(ci + 2); const iso = addDays(ui.monday, d - 1); const off = offInfo(iso);
-    if (off) { grid.append(h('div', { class: 'offcell ' + off.kind, style: { gridColumn: col, gridRow: `${R0} / ${slots.length + R0}` } }, icon(off.kind === 'holiday' ? 'sun' : 'calendar', 30), h('div', { class: 'ofk' }, t(off.kind)), off.name ? h('div', null, off.name) : null)); return; }
+    if (off) { grid.append(h('div', { class: 'offcell ' + off.kind, style: { gridColumn: col, gridRow: `${R0} / ${slots.length + R0}`, cursor: 'pointer' }, onclick: e => dayMenu(e.currentTarget, iso) }, icon(off.kind === 'holiday' ? 'sun' : 'calendar', 30), h('div', { class: 'ofk' }, t(off.kind)), off.name ? h('div', null, off.name) : null)); return; }
     const occ = occupancy(d, slots);
     slots.forEach((s, ri) => {
       const o = occ[ri];
@@ -1154,13 +1187,15 @@ function dayChips(arr, onChange) {
   } }, dayName(d, 'short').replace('.', ''))));
 }
 function genForm(o, onChange) {
-  const f = (k, label, type, extra) => field(label, h('input', { class: 'inp', type, value: String(o[k]), ...(extra || {}), oninput: e => { o[k] = type === 'number' ? +e.target.value : e.target.value; onChange && onChange(); } }));
+  let countInp = null;
+  const f = (k, label, type, extra) => { const el = h('input', { class: 'inp', type, value: String(o[k] ?? ''), ...(extra || {}), oninput: e => { o[k] = type === 'number' ? +e.target.value : e.target.value; if (k === 'endAt' && countInp) countInp.disabled = !!o.endAt; onChange && onChange(); } }); if (k === 'count') countInp = el; return field(label, el); };
   return h('div', { class: 'gform' },
     f('start', t('firstStart'), 'time'), f('dur', t('lessonDur'), 'number', { min: 5, max: 240 }),
-    f('count', t('lessonCount'), 'number', { min: 1, max: 20 }), f('gap', t('gapDur'), 'number', { min: 0, max: 60 }),
+    f('endAt', t('genEnd'), 'time'), f('count', t('lessonCount'), 'number', { min: 1, max: 20, disabled: !!o.endAt }), f('gap', t('gapDur'), 'number', { min: 0, max: 60 }),
     f('breakDur', t('breakDur'), 'number', { min: 0, max: 90 }),
     field(t('breakAfter'), h('input', { class: 'inp', inputmode: 'numeric', value: (o.breakAfter || []).join(', '), placeholder: '2, 6', oninput: e => { o.breakAfter = e.target.value.split(/[^0-9]+/).filter(Boolean).map(Number); onChange && onChange(); } })),
-    f('lunchAfter', t('lunchAfter'), 'number', { min: 0, max: 16 }), f('lunchDur', t('lunchDur'), 'number', { min: 0, max: 180 }));
+    f('lunchAfter', t('lunchAfter'), 'number', { min: 0, max: 16 }), f('lunchDur', t('lunchDur'), 'number', { min: 0, max: 180 }),
+    h('p', { class: 'hint', style: { gridColumn: '1 / -1' } }, t('genEndHint')));
 }
 function genPreview(o) { return genSlots(o).map(s => h('span', { class: 'gp t-' + s.type }, fmtTime(s.start) + '–' + fmtTime(s.end))); }
 
@@ -1169,6 +1204,7 @@ function lessonDialog({ dow, from, lesson }) {
   const slots = sortedSlots(); const idx = {}; slots.forEach((s, i) => idx[s.id] = i);
   const isNew = !lesson;
   const d = lesson ? { ...lesson } : { id: uid(), dow, from, to: from, subjectId: (cfg.subjects[0] || {}).id || '', cls: '', room: '' };
+  const also = new Set();
   const body = h('div');
   function build() {
     body.innerHTML = '';
@@ -1187,6 +1223,7 @@ function lessonDialog({ dow, from, lesson }) {
         field(t('class'), h('input', { class: 'inp', value: d.cls || '', oninput: e => d.cls = e.target.value })),
         field(t('room'), h('input', { class: 'inp', value: d.room || '', oninput: e => d.room = e.target.value }))),
       cfg.rotation.on ? field(t('weeksLbl'), select([['all', t('everyWeek')], ['A', t('weekA')], ['B', t('weekB')]], d.wk || 'all', v => d.wk = v)) : null,
+      isNew ? field(t('alsoOn'), h('div', { class: 'chips' }, shownDays().filter(x => x !== d.dow).map(x => h('button', { class: 'chipb' + (also.has(x) ? ' on' : ''), onclick: () => { if (also.has(x)) also.delete(x); else also.add(x); build(); } }, dayName(x, 'short').replace('.', ''))))) : null,
       h('p', { class: 'hint' }, t('lessonRepeats')));
   }
   build();
@@ -1197,6 +1234,7 @@ function lessonDialog({ dow, from, lesson }) {
     const clash = cfg.lessons.some(l => l.id !== d.id && l.dow === d.dow && compat(l.wk, d.wk) && !(Math.max(idx[l.from], idx[l.to] ?? idx[l.from]) < a || Math.min(idx[l.from], idx[l.to] ?? idx[l.from]) > b));
     if (clash) { toast(t('overlapLesson')); return; }
     const i = cfg.lessons.findIndex(l => l.id === d.id); if (i >= 0) cfg.lessons[i] = d; else cfg.lessons.push(d);
+    for (const x of also) { if (!cfg.lessons.some(l => l.dow === x && compat(l.wk, d.wk) && !(Math.max(idx[l.from], idx[l.to] ?? idx[l.from]) < a || Math.min(idx[l.from], idx[l.to] ?? idx[l.from]) > b))) cfg.lessons.push({ ...d, id: uid(), dow: x }); }
     saveCfg(); m.close(); ui.anim = 'f'; renderBody();
   };
   const m = modal(isNew ? t('addLesson') : t('editLesson'), body, [
@@ -1224,6 +1262,10 @@ function openSettings(tab) {
         h('div', { class: 'seg' }, [[false, t('off')], [true, t('on')]].map(([v, l]) => h('button', { class: 'seg-b' + (!!draft.rotation.on === v ? ' on' : ''), onclick: () => { draft.rotation.on = v; refresh(); } }, l))),
         draft.rotation.on ? h('div', { class: 'row' }, h('span', { class: 'hint', style: { margin: 0 } }, t('firstWeek')), h('div', { class: 'seg' }, ['A', 'B'].map(v => h('button', { class: 'seg-b' + (draft.rotation.first === v ? ' on' : ''), onclick: () => { draft.rotation.first = v; refresh(); } }, v)))) : null),
         h('p', { class: 'hint' }, t('rotationHint'))]),
+      section(t('display'), [h('div', { class: 'row', style: { flexWrap: 'wrap' } },
+        h('span', { class: 'hint', style: { margin: 0 } }, t('density')), h('div', { class: 'seg' }, ['compact', 'normal', 'large'].map(v => h('button', { class: 'seg-b' + ((draft.density || 'normal') === v ? ' on' : ''), onclick: () => { draft.density = v; refresh(); } }, t('dens_' + v))))),
+        h('div', { class: 'row', style: { marginTop: '10px', flexWrap: 'wrap' } }, h('span', { class: 'hint', style: { margin: 0 } }, t('hideEmpty')), h('div', { class: 'seg' }, [[false, t('off')], [true, t('on')]].map(([v, l]) => h('button', { class: 'seg-b' + (!!draft.hideEmpty === v ? ' on' : ''), onclick: () => { draft.hideEmpty = v; refresh(); } }, l)))),
+        h('p', { class: 'hint' }, t('hideEmptyHint'))]),
       section(t('noteFont'), h('div', { class: 'row' },
         select(FONTS.map(f => [f.id, f.label || t('fontDefault')]), draft.font.family, v => draft.font.family = v),
         select(SIZES.map(s => [s, s + ' px']), draft.font.size, v => draft.font.size = +v)))),
@@ -1260,17 +1302,28 @@ function openSettings(tab) {
       let dayBox = null;
       if (slots.length) {
         const first = slots[0], last = slots.reduce((a, b) => toMin(b.end) > toMin(a.end) ? b : a);
-        const ds = { v: first.start }, de = { v: last.end };
-        const apply = () => {
-          const d = ds.v ? toMin(ds.v) - toMin(first.start) : 0;
+        const ds = { v: first.start, ch: false }, de = { v: last.end, ch: false };
+        const apply = async () => {
+          const d = ds.ch && ds.v ? toMin(ds.v) - toMin(first.start) : 0;
           if (d && !slots.some(x => toMin(x.start) + d < 0 || toMin(x.end) + d > 1439)) draft.slots.forEach(x => { x.start = fromMin(toMin(x.start) + d); x.end = fromMin(toMin(x.end) + d); });
-          const endWanted = de.v && de.v !== last.end ? de.v : null;
-          if (endWanted && toMin(endWanted) > toMin(last.start)) last.end = endWanted;
+          const cur = draft.slots.slice().sort(bySt), lastNow = cur.reduce((a, b) => toMin(b.end) > toMin(a.end) ? b : a);
+          const want = de.ch && de.v ? toMin(de.v) : null;
+          if (want != null && want > toMin(lastNow.end)) {
+            const ls = cur.filter(x => x.type === 'lesson'), ref = ls.length ? ls[ls.length - 1] : lastNow;
+            const dur = Math.max(5, toMin(ref.end) - toMin(ref.start)), gap = +(draft.gen && draft.gen.gap) || 0;
+            let mm = toMin(lastNow.end) + gap;
+            while (mm + 15 <= want) { const e = Math.min(mm + dur, want); draft.slots.push({ id: uid(), type: 'lesson', label: '', start: fromMin(mm), end: fromMin(e) }); mm = e + gap; }
+          } else if (want != null && want < toMin(lastNow.end) && want > toMin(cur[0].start)) {
+            const ids = new Set(cur.filter(x => toMin(x.start) >= want).map(x => x.id)), used = draft.lessons.filter(l => ids.has(l.from) || ids.has(l.to));
+            if (used.length && !await confirmDlg(t('endCutConfirm', { t: fmtTime(fromMin(want)) }), t('delete'), true)) { refresh(); return; }
+            draft.lessons = draft.lessons.filter(l => !used.includes(l)); draft.slots = draft.slots.filter(x => !ids.has(x.id));
+            draft.slots.forEach(x => { if (toMin(x.end) > want) x.end = fromMin(want); });
+          }
           refresh();
         };
         dayBox = h('div', { class: 'grid2', style: { alignItems: 'end' } },
-          field(t('dayStart'), h('input', { class: 'inp', type: 'time', value: first.start, oninput: e => ds.v = e.target.value })),
-          field(t('dayEnd'), h('input', { class: 'inp', type: 'time', value: last.end, oninput: e => de.v = e.target.value })),
+          field(t('dayStart'), h('input', { class: 'inp', type: 'time', value: first.start, oninput: e => { ds.v = e.target.value; ds.ch = true; } })),
+          field(t('dayEnd'), h('input', { class: 'inp', type: 'time', value: last.end, oninput: e => { de.v = e.target.value; de.ch = true; } })),
           h('div', { class: 'addrow', style: { marginTop: 0, marginBottom: '12px' } }, h('button', { class: 'btn primary', onclick: apply }, t('apply'))));
       }
       return h('div', null, gen, dayBox ? [h('h3', { class: 'sh' }, t('dayTitle')), dayBox, h('p', { class: 'hint' }, t('dayHint'))] : null, h('h3', { class: 'sh' }, t('tab_slots')), list, adds);
@@ -1806,6 +1859,8 @@ function moreMenu(anchor) {
     item('palette', t('theme'), null, () => themeMenu(anchor)),
     item('printer', t('exportPdf'), t('exportPdfHint'), exportPdf),
     item('calendar', t('exportIcs'), t('exportIcsHint'), exportIcs),
+    item('copy', t('copyWeek'), t('copyWeekHint'), copyWeekNotes),
+    ui.view === 'day' ? item('sun', t('markOff') + ' / ' + t('unmarkOff'), cap(fmtDate(addDays(ui.monday, ui.day - 1), { weekday: 'long', day: 'numeric', month: 'long' })), () => dayMenu(anchor, addDays(ui.monday, ui.day - 1))) : null,
     item('download', t('export'), null, exportData)));
 }
 const loadScript = src => new Promise((res, rej) => { if (document.querySelector(`script[data-src="${src}"]`)) return res(); const sc = document.createElement('script'); sc.src = src; sc.dataset.src = src; sc.onload = res; sc.onerror = rej; document.head.append(sc); });
@@ -1882,6 +1937,27 @@ async function loadOnline(country, sub, y) {
   } catch {}
   const note = vacations.length || holidays.length ? t('onlineNote') : t('ohFail');
   return { start, end, vacations: vacations.map(v => ({ id: uid(), ...v })), holidays, note };
+}
+
+
+/* ================= Congés ponctuels, copie de semaine ================= */
+function dayMenu(anchor, iso) {
+  const y = cfg.year, hol = y.holidays.find(x => x.date === iso), off = offInfo(iso);
+  const item = (ic, title, hint, fn) => h('button', { class: 'mi', onclick: () => { closePop(); fn(); } }, icon(ic, 16), h('span', null, h('b', null, title), hint ? h('small', null, hint) : null));
+  popover(anchor, h('div', { class: 'menu' },
+    h('div', { class: 'cp-lbl', style: { margin: '4px 10px' } }, cap(fmtDate(iso, { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' }))),
+    hol ? item('trash', t('unmarkOff'), hol.name, () => { y.holidays = y.holidays.filter(x => x !== hol); saveCfg(); ui.anim = 'f'; renderBody(); })
+      : !off ? item('sun', t('markOff'), t('markOffHint'), async () => { const name = await promptDlg(t('dayOffPrompt'), t('dayOffName')); if (name === null) return; y.holidays.push({ id: uid(), name: name || t('dayOffName'), date: iso }); y.holidays.sort((a, b) => a.date.localeCompare(b.date)); saveCfg(); ui.anim = 'f'; renderBody(); })
+      : h('p', { class: 'hint', style: { margin: '6px 10px' } }, (off.name || t(off.kind))),
+    item('clipboard', t('addTaskDay'), null, () => taskDialog(null, { due: iso }))));
+}
+async function copyWeekNotes() {
+  if (notesTimer) await flushNotes();
+  if (!Object.keys(notes).length) { toast(t('emptyNote')); return; }
+  const L = weekList(), i = L.indexOf(ui.monday), next = i >= 0 && L[i + 1] ? L[i + 1] : addDays(ui.monday, 7);
+  const cache = { [next]: await readWeek(next) }, before = clone(cache);
+  for (const [k, html] of Object.entries(notes)) { const ex = cache[next][k]; if (ex === html) continue; cache[next][k] = ex ? ex + '<hr>' + html : html; }
+  await applyWeeks(cache, before, t('weekCopied', { n: isoWeek(next) }));
 }
 
 /* ================= Sauvegarde / import ================= */
